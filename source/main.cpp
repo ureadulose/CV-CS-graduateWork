@@ -2,10 +2,12 @@
 #include <iostream>
 
 // my hpps
-#include "general/VideoHandler.h"
+#include "general/TrackerBody.h"
 
 void main()
 {
-	VideoHandler VH("../resources/1.mp4", "myWindow");
-	VH.Play();
+	std::string filename = "../resources/1.mp4";
+	std::string window_name = "my Window";
+	TrackerBody TB(filename, window_name);
+	TB.Run();
 }

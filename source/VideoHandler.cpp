@@ -1,21 +1,21 @@
 #include "general/VideoHandler.h"
 
-VideoHandler::VideoHandler(const std::string& filename, const std::string& window_name)
-	: _video(filename), _window_name(window_name)
+VideoHandler::VideoHandler(const std::string& filename)
 {
-	//cv::namedWindow(_window_name, cv::WINDOW_NORMAL);
+	_cap = new cv::VideoCapture(filename);
 }
 
-void VideoHandler::Play()
+VideoHandler::~VideoHandler()
 {
-	while (true)
-	{
-		cv::Mat frame;
-		if (!_video.read(frame))
-			break;
+	delete _cap;
+}
 
-		cv::imshow(_window_name, frame);
-		if (cv::waitKey(25) == 27)
-			break;
-	}
+bool VideoHandler::ReadFrame()
+{
+	return _cap->read(_curr_rgb_frame);
+}
+
+cv::Mat VideoHandler::GetCurrRgbFrame()
+{
+	return _curr_rgb_frame;
 }
