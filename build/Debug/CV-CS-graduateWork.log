@@ -1,5 +1,4 @@
 ﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(517,5): warning MSB8028: промежуточный каталог (..\build\Debug\) содержит файлы, которые используются совместно с другим проектом (Visual-Vibration-Tracking-V2.vcxproj).  Это может привести к ошибкам очистки и перестроения.
-  foo.cpp
-  Source.cpp
-  Создание кода...
+  main.cpp
+C:\Users\ass\source\repos\CV-CS-graduateWork\source\main.cpp(8,1): warning C4326: возвращаемый тип "main" должен быть "int", а не "void"
   CV-CS-graduateWork.vcxproj -> C:\Users\ass\source\repos\CV-CS-graduateWork\product\Debug\CV-CS-graduateWork.exe
