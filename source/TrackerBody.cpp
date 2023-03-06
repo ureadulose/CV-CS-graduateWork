@@ -6,12 +6,19 @@ TrackerBody::TrackerBody(std::string& filename, std::string& window_name)
 	: _filename(filename), _window_name(window_name), _onPause(false)
 {
 	_VH_cap = new VideoHandler(_filename);
+	_PT_cap = new PointTracker();
+
+	_obj_coords = cv::Point2f();
+
 	cv::namedWindow(_window_name, cv::WINDOW_NORMAL);
+
+	cv::setMouseCallback(_window_name, onMouseClick, this);
 }
 
 TrackerBody::~TrackerBody()
 {
 	delete _VH_cap;
+	delete _PT_cap;
 	cv::destroyAllWindows();
 }
 
@@ -23,7 +30,13 @@ bool TrackerBody::Run()
 		{
 			_VH_cap->ReadFrame();
 		}
-		cv::imshow(_window_name, _VH_cap->GetCurrRgbFrame());
+
+		_PT_cap->Track(*_VH_cap->GetPrevRgbFrame(), *_VH_cap->GetCurrRgbFrame(), _obj_coords);
+		_PT_cap->DrawPointOnAFrame(*_VH_cap->GetCurrRgbFrame(), _obj_coords);
+
+
+		cv::imshow(_window_name, *_VH_cap->GetCurrRgbFrame());
+
 		int key = cv::waitKey(INTERVAL_IN_MS);
 		switch (key)
 		{
@@ -34,4 +47,16 @@ bool TrackerBody::Run()
 		}
 	}
 	return false;
+}
+
+void TrackerBody::onMouseClick(int event, int x, int y, int flags, void* userdata)
+{
+	TrackerBody* TB = reinterpret_cast<TrackerBody*>(userdata);
+
+	// Обработка событий
+	if (event == cv::EVENT_LBUTTONDOWN)
+	{
+		std::cout << "Mouse clicked at (" << x << ", " << y << ")" << std::endl;
+		TB->_obj_coords = cv::Point2i(x, y);
+	}
 }

@@ -20,9 +20,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\source\main.cpp" />
+    <ClCompile Include="..\source\PointTracker.cpp" />
+    <ClCompile Include="..\source\TrackerBody.cpp" />
     <ClCompile Include="..\source\VideoHandler.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\include\general\PointTracker.h" />
+    <ClInclude Include="..\include\general\TrackerBody.h" />
     <ClInclude Include="..\include\general\VideoHandler.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

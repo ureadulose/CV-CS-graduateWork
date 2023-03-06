@@ -23,9 +23,21 @@
     <ClCompile Include="..\source\VideoHandler.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="..\source\TrackerBody.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PointTracker.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\general\VideoHandler.h">
+      <Filter>include\general</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\general\TrackerBody.h">
+      <Filter>include\general</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\general\PointTracker.h">
       <Filter>include\general</Filter>
     </ClInclude>
   </ItemGroup>

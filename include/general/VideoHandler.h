@@ -4,17 +4,23 @@
 #include <iostream>
 #include "opencv2/opencv.hpp"
 
+/*!
+* @brief  ласс предназначен дл€ чтени€ видео-файла и получени€ cv::Mat изображени€
+*/
 class VideoHandler
 {
 public:
-	/*!  онструктор класса, способного проигрывать видео в окне  */
-	VideoHandler(const std::string& filename, const std::string& window_name);
+	VideoHandler(const std::string& filename);
+	~VideoHandler();
 
-	void Play();
+	bool ReadFrame();
+	cv::Mat* GetCurrRgbFrame();
+	cv::Mat* GetPrevRgbFrame();
 
 private:
-	cv::VideoCapture _video;
-	std::string _window_name;
+	cv::VideoCapture* _cap;
+	cv::Mat _curr_rgb_frame;
+	cv::Mat _prev_rgb_frame;
 };
 
 #endif // !VIDEO_HANDLER_H
