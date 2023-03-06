@@ -24,7 +24,6 @@ private:
 	std::string _filename;
 	std::string _window_name;
 
-
 	VideoHandler* _VH_cap;
 	PointTracker* _PT_cap;
 

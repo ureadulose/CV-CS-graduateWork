@@ -8,7 +8,7 @@ TrackerBody::TrackerBody(std::string& filename, std::string& window_name)
 	_VH_cap = new VideoHandler(_filename);
 	_PT_cap = new PointTracker();
 
-	_obj_coords = cv::Point2f();
+	_obj_coords = cv::Point2f(0.f, 0.f);
 
 	cv::namedWindow(_window_name, cv::WINDOW_NORMAL);
 
@@ -31,8 +31,12 @@ bool TrackerBody::Run()
 			_VH_cap->ReadFrame();
 		}
 
-		_PT_cap->Track(*_VH_cap->GetPrevRgbFrame(), *_VH_cap->GetCurrRgbFrame(), _obj_coords);
-		_PT_cap->DrawPointOnAFrame(*_VH_cap->GetCurrRgbFrame(), _obj_coords);
+		if (_obj_coords.x != 0.f && _obj_coords.y != 0.f)
+		{
+			_PT_cap->Track(*_VH_cap->GetPrevRgbFrame(), *_VH_cap->GetCurrRgbFrame(), _obj_coords);
+			_PT_cap->DrawPointOnAFrame(*_VH_cap->GetCurrRgbFrame(), _obj_coords);
+		}
+
 
 
 		cv::imshow(_window_name, *_VH_cap->GetCurrRgbFrame());

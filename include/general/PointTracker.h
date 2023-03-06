@@ -14,10 +14,6 @@ public:
 
 	void DrawPointOnAFrame(cv::Mat& frame, cv::Point2f& point);
 
-private:
-	// TMP!!!!!!!!
-	std::vector<cv::Point2f> _prev_coords;
-	std::vector<cv::Point2f> _curr_coords;
 };
 
 #endif // !POINT_TRACKER_H
