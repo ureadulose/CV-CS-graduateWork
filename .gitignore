@@ -3,3 +3,7 @@
 *.gif
 *.opendb
 *.vsidx
+*.db
+build/
+product/
+MSVS22/
