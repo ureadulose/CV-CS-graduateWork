@@ -28,7 +28,8 @@ bool TrackerBody::Run()
 	{
 		if (!_onPause)
 		{
-			_VH_cap->ReadFrame();
+			if (!_VH_cap->ReadFrame())
+				break;
 		}
 
 		if (_obj_coords.x != 0.f && _obj_coords.y != 0.f)
