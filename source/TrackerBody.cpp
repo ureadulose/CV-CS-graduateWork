@@ -34,7 +34,7 @@ bool TrackerBody::Run()
 
 		if (_obj_coords.x != 0.f && _obj_coords.y != 0.f)
 		{
-			_PT_cap->Track(*_VH_cap->GetPrevRgbFrame(), *_VH_cap->GetCurrRgbFrame(), _obj_coords);
+			_PT_cap->Track(*_VH_cap->GetPrevRgbFrame(), *_VH_cap->GetCurrRgbFrame(), _obj_coords, 0);
 			_PT_cap->DrawPointOnAFrame(*_VH_cap->GetCurrRgbFrame(), _obj_coords);
 		}
 

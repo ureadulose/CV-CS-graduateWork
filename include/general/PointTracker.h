@@ -11,7 +11,10 @@ public:
 	PointTracker();
 	~PointTracker();
 
-	cv::Point2f Track(cv::Mat& frame1, cv::Mat& frame2, cv::Point2f& coords1);
+	/*! 
+	* @brief method_num: 0 - Farneback, 1 - HornSchunck
+	*/
+	cv::Point2f Track(cv::Mat& frame1, cv::Mat& frame2, cv::Point2f& coords1, int method_num);
 
 	void DrawPointOnAFrame(cv::Mat& frame, cv::Point2f& point);
 
