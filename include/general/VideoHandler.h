@@ -2,7 +2,7 @@
 #define VIDEO_HANDLER_H
 
 #include <iostream>
-#include "opencv2/opencv.hpp"
+#include "opencv2/highgui.hpp"
 
 /*!
 * @brief Класс предназначен для чтения видео-файла и получения cv::Mat изображения

@@ -6,7 +6,7 @@ VideoHandler::VideoHandler(const std::string& filename)
 	if (!_cap->isOpened())
 	{
 		std::cerr << "Error: Could not open video file " << filename << std::endl;
-		return;
+        return;
 	}
 	_cap->read(_curr_rgb_frame);
 }
