@@ -15,5 +15,5 @@ int main(int argc, char *argv[])
     std::string filename = "C:/Users/ass/source/repos/CV-CS-graduateWork/resources/1.mp4";
     std::string window_name = "my Window";
     TrackerBody TB(filename, window_name);
-    TB.Run();
+    return TB.Run();
 }

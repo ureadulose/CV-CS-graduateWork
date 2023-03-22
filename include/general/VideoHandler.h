@@ -5,7 +5,7 @@
 #include "opencv2/highgui.hpp"
 
 /*!
-* @brief Класс предназначен для чтения видео-файла и получения cv::Mat изображения
+* @brief Class is meant to read video and get cv::Mat
 */
 class VideoHandler
 {

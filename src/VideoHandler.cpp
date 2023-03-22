@@ -13,7 +13,7 @@ VideoHandler::VideoHandler(const std::string& filename)
 
 VideoHandler::~VideoHandler()
 {
-	delete _cap;
+    delete _cap;
 }
 
 bool VideoHandler::ReadFrame()

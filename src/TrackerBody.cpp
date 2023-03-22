@@ -18,7 +18,7 @@ TrackerBody::TrackerBody(std::string& filename, std::string& window_name)
 TrackerBody::~TrackerBody()
 {
 	delete _VH_cap;
-	delete _PT_cap;
+    delete _PT_cap;
 	cv::destroyAllWindows();
 }
 
@@ -58,8 +58,8 @@ void TrackerBody::onMouseClick(int event, int x, int y, int flags, void* userdat
 {
 	TrackerBody* TB = reinterpret_cast<TrackerBody*>(userdata);
 
-	// Обработка событий
-	if (event == cv::EVENT_LBUTTONDOWN)
+    // Event handler
+    if (event == cv::EVENT_LBUTTONDOWN)
 	{
 		std::cout << "Mouse clicked at (" << x << ", " << y << ")" << std::endl;
 		TB->_obj_coords = cv::Point2i(x, y);

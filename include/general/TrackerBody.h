@@ -6,7 +6,7 @@
 #include "general/PointTracker.h"
 
 /*!
-* @brief Класс предназначен в качестве оболочки для всей программы
+* @brief Class is meant to be a shell for the whole app
 */
 class TrackerBody
 {
