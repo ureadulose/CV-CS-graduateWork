@@ -6,19 +6,19 @@ CONFIG += c++17
 CONFIG -= app_bundle
 
 SOURCES +=  \
+    src/CvFrameBufferHandler.cpp \
     src/ImageWindow.cpp \
     src/PointTracker.cpp \
-    src/TrackerBody.cpp \
-    src/VideoHandler.cpp \
+    src/VideoTrackerPlayer.cpp \
     src/main.cpp
 
 INCLUDEPATH += $$PWD \
     include
 
 HEADERS += \
+    include/general/CvFrameBufferHandler.h \
     include/general/PointTracker.h \
-    include/general/TrackerBody.h \
-    include/general/VideoHandler.h \
+    include/general/VideoTrackerPlayer.h \
     include/ui/ImageWindow.h
 
 FORMS += \
