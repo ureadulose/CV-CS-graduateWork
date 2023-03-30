@@ -26,6 +26,7 @@ public:
     cv::Mat* GetCurrRgbFrame();
 	cv::Mat* GetPrevRgbFrame();
     int GetFramerate();
+    cv::Size GetFrameSize();
 
 private:
 	cv::VideoCapture* _cap;

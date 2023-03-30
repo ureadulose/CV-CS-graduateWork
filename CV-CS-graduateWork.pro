@@ -9,6 +9,7 @@ SOURCES +=  \
     src/CvFrameBufferHandler.cpp \
     src/ImageWindow.cpp \
     src/PointTracker.cpp \
+    src/VideoFrame.cpp \
     src/VideoTrackerPlayer.cpp \
     src/main.cpp
 
@@ -18,6 +19,7 @@ INCLUDEPATH += $$PWD \
 HEADERS += \
     include/general/CvFrameBufferHandler.h \
     include/general/PointTracker.h \
+    include/general/VideoFrame.h \
     include/general/VideoTrackerPlayer.h \
     include/ui/ImageWindow.h
 

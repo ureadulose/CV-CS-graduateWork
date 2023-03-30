@@ -19,6 +19,9 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+private:
+    cv::Point2f MapToImageCoords(QSize map_size, cv::Size image_size, QPointF src_coords);
+
 private slots:
     // Display video frame in player UI
     void updatePlayerUI(QImage img);
@@ -28,6 +31,13 @@ private slots:
 
     // Slot for the play push button
     void on_pushButton_2_clicked();
+
+    // Slot for getting current mouse position on a VideoFrame
+    void MouseCurrentPos();
+
+    void MousePressed();
+
+    void MouseLeftFrame();
 
 private:
     Ui::MainWindow *ui;

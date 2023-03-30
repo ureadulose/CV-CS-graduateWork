@@ -23,6 +23,11 @@ public:
     void Stop();
     bool isStopped() const;
 
+    void RefreshTrackCoords(cv::Point2f obj_coords);
+
+    // Video Parameters
+    cv::Size GetFrameSize();
+
 signals:
     // Signal for outputting the frame to be displayed
     void ToBeDisplayed(const QImage &image);
@@ -45,6 +50,7 @@ private:
     QMutex _mutex;
     QWaitCondition _cond;
 
+    bool _FBH_cap_created;
     int _framerate;
     cv::Mat *_cvFrame;
     QImage _qImg;

@@ -34,5 +34,5 @@ cv::Point2f PointTracker::Track(cv::Mat& frame1, cv::Mat& frame2, cv::Point2f& i
 
 void PointTracker::DrawPointOnAFrame(cv::Mat& frame, cv::Point2f& point)
 {
-	cv::circle(frame, point, 10, cv::Scalar(255, 255, 255), 1, cv::FILLED);
+    cv::circle(frame, point, 10, cv::Scalar(255, 255, 255), -1);
 }

@@ -1,6 +1,8 @@
 #include "ui/ImageWindow.h"
 #include "ui_mainwindow.h"
 
+#include "general/VideoFrame.h"
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -10,6 +12,13 @@ MainWindow::MainWindow(QWidget *parent)
                      this, SLOT(updatePlayerUI(QImage)));
 
     ui->setupUi(this);
+
+    QObject::connect(ui->lblFrame, SIGNAL(MousePosSignal()),
+                     this, SLOT(MouseCurrentPos()));
+    QObject::connect(ui->lblFrame, SIGNAL(MousePressedSignal()),
+                     this, SLOT(MousePressed()));
+    QObject::connect(ui->lblFrame, SIGNAL(MouseLeftFrameSignal()),
+                     this, SLOT(MouseLeftFrame()));
 }
 
 MainWindow::~MainWindow()
@@ -18,12 +27,23 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+cv::Point2f MainWindow::MapToImageCoords(QSize map_size, cv::Size image_size, QPointF src_coords)
+{
+    float xScale = static_cast<float>(image_size.width) / static_cast<float>(map_size.width());
+    float yScale = static_cast<float>(image_size.height) / static_cast<float>(map_size.height());
+
+    int x = static_cast<int>(xScale * src_coords.x());
+    int y = static_cast<int>(yScale * src_coords.y());
+
+    return cv::Point2f(x, y);
+}
+
 void MainWindow::updatePlayerUI(QImage img)
 {
     if (!img.isNull())
     {
-        ui->label->setAlignment(Qt::AlignCenter);
-        ui->label->setPixmap(QPixmap::fromImage(img).scaled(ui->label->size(),
+        ui->lblFrame->setAlignment(Qt::AlignCenter);
+        ui->lblFrame->setPixmap(QPixmap::fromImage(img).scaled(ui->lblFrame->size(),
                                                             Qt::KeepAspectRatio, Qt::FastTransformation));
     }
 }
@@ -56,5 +76,27 @@ void MainWindow::on_pushButton_2_clicked()
         VTPlayer->Stop();
         ui->pushButton_2->setText(tr("Play"));
     }
+}
+
+void MainWindow::MouseCurrentPos()
+{
+    ui->lblMousePos->setText(QString("X = %1, Y = %2").arg(ui->lblFrame->GetCurrentMousePos().x()).arg(ui->lblFrame->GetCurrentMousePos().x()));
+}
+
+void MainWindow::MousePressed()
+{
+    // calculating difference between pixmap size and lblFrame size (in which pixmap is drawn)
+    QSize lbl_pixmap_diff = ui->lblFrame->size() - ui->lblFrame->pixmap().size();
+    // calculating target point which is equal to (click coordinates - difference)
+    QPointF target = QPointF(ui->lblFrame->GetCurrentMousePos().x() - lbl_pixmap_diff.width(), ui->lblFrame->GetCurrentMousePos().y() - lbl_pixmap_diff.height() / 2);
+    // translating to framesize-based coordinates
+    cv::Point2f obj_coords = MapToImageCoords(ui->lblFrame->pixmap().size(), VTPlayer->GetFrameSize(), target);
+
+    VTPlayer->RefreshTrackCoords(obj_coords);
+}
+
+void MainWindow::MouseLeftFrame()
+{
+
 }
 

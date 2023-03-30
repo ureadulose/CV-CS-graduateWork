@@ -41,3 +41,8 @@ int CvFrameBufferHandler::GetFramerate()
 {
     return _cap->get(cv::CAP_PROP_FPS);
 }
+
+cv::Size CvFrameBufferHandler::GetFrameSize()
+{
+    return cv::Size(_cap->get(cv::CAP_PROP_FRAME_WIDTH), _cap->get(cv::CAP_PROP_FRAME_HEIGHT));
+}

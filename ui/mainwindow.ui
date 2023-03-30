@@ -14,7 +14,7 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QLabel" name="label">
+   <widget class="VideoFrame" name="lblFrame">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -22,6 +22,9 @@
       <width>671</width>
       <height>531</height>
      </rect>
+    </property>
+    <property name="mouseTracking">
+     <bool>true</bool>
     </property>
     <property name="styleSheet">
      <string notr="true">Background-color: #000;</string>
@@ -56,6 +59,19 @@
      </item>
     </layout>
    </widget>
+   <widget class="QLabel" name="lblMousePos">
+    <property name="geometry">
+     <rect>
+      <x>710</x>
+      <y>150</y>
+      <width>71</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>X = 0, Y = 0</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -69,6 +85,13 @@
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>VideoFrame</class>
+   <extends>QLabel</extends>
+   <header location="global">general/videoframe.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
