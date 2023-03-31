@@ -1,7 +1,8 @@
 #include "general/PointTracker.h"
 #include <iostream>
 
-PointTracker::PointTracker()
+PointTracker::PointTracker(std::vector<DataPoint>& pts_to_be_tracked) :
+    _pts_to_be_tracked{ pts_to_be_tracked }
 {
 }
 
@@ -9,7 +10,7 @@ PointTracker::~PointTracker()
 {
 }
 
-cv::Point2f PointTracker::Track(cv::Mat& frame1, cv::Mat& frame2, cv::Point2f& input_coords, int method_num)
+void PointTracker::Track(cv::Mat& frame1, cv::Mat& frame2, int method_num)
 {
 	cv::Mat flow, frame1_gray, frame2_gray;
 
@@ -19,20 +20,18 @@ cv::Point2f PointTracker::Track(cv::Mat& frame1, cv::Mat& frame2, cv::Point2f& i
 	if (frame2.channels() > 1)
 		cv::cvtColor(frame2, frame2_gray, cv::COLOR_BGR2GRAY);
 
+    // Calculating Optical Flow on the whole image and then calculating points displacement
     if (method_num == 1)
         int num;
+        // TODO: currently this doesnt works :(
         //cv::calcOpticalFlowFarneback(frame1_gray, frame2_gray, flow, 0.5, 3, 15, 3, 5, 1.2, 0);
     else if (method_num == 0)
         cv::optflow::calcOpticalFlowSparseToDense(frame1_gray, frame2_gray, flow, 8, 128, 0.01);
 
-	cv::Point2f displacement = flow.at<cv::Point2f>(input_coords.y, input_coords.x);
+    for (auto& point : _pts_to_be_tracked)
+    {
+        cv::Point2f displacement = flow.at<cv::Point2f>(point.GetLastPos().y, point.GetLastPos().x);
+        point.AddPos(point.GetLastPos() + displacement);
+    }
 
-	input_coords += displacement;
-
-	return cv::Point2f(input_coords.x + displacement.x, input_coords.y + displacement.y);
-}
-
-void PointTracker::DrawPointOnAFrame(cv::Mat& frame, cv::Point2f& point)
-{
-    cv::circle(frame, point, 10, cv::Scalar(255, 255, 255), -1);
 }

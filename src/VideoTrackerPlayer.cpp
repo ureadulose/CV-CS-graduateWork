@@ -8,9 +8,9 @@ VideoTrackerPlayer::VideoTrackerPlayer(QObject *parent) :
     _stop{ true },
     _FBH_cap_created{ false }
 {
-	_PT_cap = new PointTracker();
-
-    _obj_coords = cv::Point2f(0.f, 0.f);
+    _PM_cap = new PointsManager();
+    // passing a link for a DataPoint vector which is handled in PointsManager and will be tracked in PointTracker
+    _PT_cap = new PointTracker(_PM_cap->GetPoints());
 }
 
 VideoTrackerPlayer::~VideoTrackerPlayer()
@@ -26,6 +26,7 @@ VideoTrackerPlayer::~VideoTrackerPlayer()
     _mutex.unlock();
 
     delete _PT_cap;
+    delete _PM_cap;
 }
 
 bool VideoTrackerPlayer::LoadVideo(std::string filename)
@@ -61,7 +62,8 @@ bool VideoTrackerPlayer::isStopped() const
 
 void VideoTrackerPlayer::RefreshTrackCoords(cv::Point2f obj_coords)
 {
-    this->_obj_coords = obj_coords;
+    // TODO: have to recode this later but for now it's like this:
+    this->_PM_cap->AddPoint(obj_coords);
 }
 
 cv::Size VideoTrackerPlayer::GetFrameSize()
@@ -81,10 +83,10 @@ void VideoTrackerPlayer::run()
         }
         _cvFrame = _FBH_cap->GetCurrRgbFrame();
 
-        if (_obj_coords.x != 0.f && _obj_coords.y != 0.f)
+        if (!_PM_cap->Empty())
             {
-                _PT_cap->Track(*_FBH_cap->GetPrevRgbFrame(), *_FBH_cap->GetCurrRgbFrame(), _obj_coords, 0);
-                _PT_cap->DrawPointOnAFrame(*_FBH_cap->GetCurrRgbFrame(), _obj_coords);
+                _PT_cap->Track(*_FBH_cap->GetPrevRgbFrame(), *_FBH_cap->GetCurrRgbFrame(), 0);
+                _PM_cap->DrawPoints(*_FBH_cap->GetCurrRgbFrame());
             }
 
         cv::cvtColor(*_cvFrame, *_cvFrame, cv::COLOR_BGR2RGB);

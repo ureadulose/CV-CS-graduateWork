@@ -5,9 +5,9 @@ VideoFrame::VideoFrame(QWidget *parent) :
 {
 }
 
-//VideoFrame::~VideoFrame()
-//{
-//}
+VideoFrame::~VideoFrame()
+{
+}
 
 void VideoFrame::mouseMoveEvent(QMouseEvent *ev)
 {

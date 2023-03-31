@@ -14,7 +14,7 @@ class VideoFrame : public QLabel
 
 public:
     explicit VideoFrame(QWidget *parent = 0);
-    //~VideoFrame();
+    ~VideoFrame();
 
     void mouseMoveEvent(QMouseEvent *ev);
     void mousePressEvent(QMouseEvent *ev);

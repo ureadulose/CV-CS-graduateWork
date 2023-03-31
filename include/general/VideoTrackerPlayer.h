@@ -4,6 +4,7 @@
 // my headers
 #include "general/CvFrameBufferHandler.h"
 #include "general/PointTracker.h"
+#include "PointsHandling/PointsManager.h"
 
 #include <QImage>
 
@@ -36,15 +37,11 @@ protected:
     void run();
     void msleep(int ms);
 
-//private:
-//	static void onMouseClick(int event, int x, int y, int flags, void* userdata);
-
 
 private:
     CvFrameBufferHandler* _FBH_cap;
     PointTracker* _PT_cap;
-
-    cv::Point2f _obj_coords;
+    PointsManager* _PM_cap;
 
     bool _stop;
     QMutex _mutex;

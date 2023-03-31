@@ -2,22 +2,24 @@
 #define POINT_TRACKER_H
 
 // OpenCV headers
-//#include "opencv2/opencv.hpp"
 #include <opencv2/optflow.hpp>
 #include <opencv2/tracking.hpp>
+
+#include "PointsHandling/DataPoint.h"
 
 class PointTracker
 {
 public:
-	PointTracker();
+    PointTracker(std::vector<DataPoint>& pts_to_be_tracked);
 	~PointTracker();
 
 	/*! 
 	* @brief method_num: 0 - Farneback, 1 - HornSchunck
 	*/
-	cv::Point2f Track(cv::Mat& frame1, cv::Mat& frame2, cv::Point2f& coords1, int method_num);
+    void Track(cv::Mat& frame1, cv::Mat& frame2, int method_num);
 
-	void DrawPointOnAFrame(cv::Mat& frame, cv::Point2f& point);
+private:
+    std::vector<DataPoint>& _pts_to_be_tracked;
 
 };
 

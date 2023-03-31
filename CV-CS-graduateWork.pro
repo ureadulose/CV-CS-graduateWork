@@ -9,6 +9,8 @@ SOURCES +=  \
     src/CvFrameBufferHandler.cpp \
     src/ImageWindow.cpp \
     src/PointTracker.cpp \
+    src/PointsHandling/DataPoint.cpp \
+    src/PointsHandling/PointsManager.cpp \
     src/VideoFrame.cpp \
     src/VideoTrackerPlayer.cpp \
     src/main.cpp
@@ -17,6 +19,8 @@ INCLUDEPATH += $$PWD \
     include
 
 HEADERS += \
+    include/PointsHandling/DataPoint.h \
+    include/PointsHandling/PointsManager.h \
     include/general/CvFrameBufferHandler.h \
     include/general/PointTracker.h \
     include/general/VideoFrame.h \
