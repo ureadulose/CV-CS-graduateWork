@@ -1,4 +1,4 @@
-#include "general/VideoTrackerPlayer.h"
+#include "VideoHandling/VideoTrackerPlayer.h"
 
 // for CV waiter implementation
 //constexpr double INTERVAL_IN_MS = 25;

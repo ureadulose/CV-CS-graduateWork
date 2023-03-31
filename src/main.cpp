@@ -2,7 +2,7 @@
 #include <opencv2/core.hpp>
 #include <QApplication>
 #include <iostream>
-#include "general/VideoTrackerPlayer.h"
+#include "VideoHandling/VideoTrackerPlayer.h"
 
 int main(int argc, char *argv[])
 {

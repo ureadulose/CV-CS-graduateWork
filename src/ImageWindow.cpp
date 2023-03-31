@@ -1,7 +1,7 @@
 #include "ui/ImageWindow.h"
 #include "ui_mainwindow.h"
 
-#include "general/VideoFrame.h"
+#include "VideoHandling/VideoFrame.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)

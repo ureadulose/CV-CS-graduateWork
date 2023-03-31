@@ -2,8 +2,8 @@
 #define VIDEO_TRACKER_PLAYER_H
 
 // my headers
-#include "general/CvFrameBufferHandler.h"
-#include "general/PointTracker.h"
+#include "VideoHandling/CvFrameBufferHandler.h"
+#include "PointsHandling/PointTracker.h"
 #include "PointsHandling/PointsManager.h"
 
 #include <QImage>

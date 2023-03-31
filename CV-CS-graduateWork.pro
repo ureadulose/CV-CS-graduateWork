@@ -20,11 +20,11 @@ INCLUDEPATH += $$PWD \
 
 HEADERS += \
     include/PointsHandling/DataPoint.h \
+    include/PointsHandling/PointTracker.h \
     include/PointsHandling/PointsManager.h \
-    include/general/CvFrameBufferHandler.h \
-    include/general/PointTracker.h \
-    include/general/VideoFrame.h \
-    include/general/VideoTrackerPlayer.h \
+    include/VideoHandling/CvFrameBufferHandler.h \
+    include/VideoHandling/VideoFrame.h \
+    include/VideoHandling/VideoTrackerPlayer.h \
     include/ui/ImageWindow.h
 
 FORMS += \

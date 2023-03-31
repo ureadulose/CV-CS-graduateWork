@@ -5,7 +5,7 @@
 #include <QFileDialog>
 #include <QMessageBox>
 
-#include "general/VideoTrackerPlayer.h"
+#include "VideoHandling/VideoTrackerPlayer.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }

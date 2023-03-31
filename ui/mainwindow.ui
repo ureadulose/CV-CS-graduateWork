@@ -89,7 +89,7 @@
   <customwidget>
    <class>VideoFrame</class>
    <extends>QLabel</extends>
-   <header location="global">general/videoframe.h</header>
+   <header location="global">VideoHandling/videoframe.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
