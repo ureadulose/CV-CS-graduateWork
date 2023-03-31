@@ -1,9 +1,14 @@
 *.ipch
-*.mp4
-*.gif
 *.opendb
 *.vsidx
 *.db
 build/
 product/
 MSVS22/
+
+*.mp4
+*.gif
+
+bin/
+resources/
+*.pro.user
