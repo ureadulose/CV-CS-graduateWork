@@ -1,4 +1,4 @@
-#include "general/CvFrameBufferHandler.h"
+#include "VideoHandling/CvFrameBufferHandler.h"
 
 CvFrameBufferHandler::CvFrameBufferHandler(const std::string& filename)
 {

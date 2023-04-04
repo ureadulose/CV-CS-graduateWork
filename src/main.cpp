@@ -7,7 +7,7 @@
 int main(int argc, char *argv[])
 {
 //    cv::Mat frame;
-    std::cout << "ass" << std::endl;
+    std::cout << "asss" << std::endl;
     QApplication a(argc, argv);
     MainWindow *w = new MainWindow();
     w->setAttribute(Qt::WA_DeleteOnClose, true);

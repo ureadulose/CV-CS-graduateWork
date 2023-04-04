@@ -1,4 +1,4 @@
-#include "general/VideoFrame.h"
+#include "VideoHandling/VideoFrame.h"
 
 VideoFrame::VideoFrame(QWidget *parent) :
     QLabel(parent)

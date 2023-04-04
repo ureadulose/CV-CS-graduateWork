@@ -6,14 +6,14 @@ CONFIG += c++17
 CONFIG -= app_bundle
 
 SOURCES +=  \
-    src/CvFrameBufferHandler.cpp \
-    src/ImageWindow.cpp \
-    src/PointTracker.cpp \
     src/PointsHandling/DataPoint.cpp \
+    src/PointsHandling/PointTracker.cpp \
     src/PointsHandling/PointsManager.cpp \
-    src/VideoFrame.cpp \
-    src/VideoTrackerPlayer.cpp \
-    src/main.cpp
+    src/VideoHandling/CvFrameBufferHandler.cpp \
+    src/VideoHandling/VideoFrame.cpp \
+    src/VideoHandling/VideoTrackerPlayer.cpp \
+    src/main.cpp \
+    src/ui/ImageWindow.cpp
 
 INCLUDEPATH += $$PWD \
     include

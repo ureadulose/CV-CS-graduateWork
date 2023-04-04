@@ -1,4 +1,4 @@
-#include "include/PointsHandling/DataPoint.h"
+#include "PointsHandling/DataPoint.h"
 
 DataPoint::DataPoint(cv::Point2f& point) :
     _last_pos{ point }

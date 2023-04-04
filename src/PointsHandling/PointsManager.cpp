@@ -1,4 +1,4 @@
-#include "include/PointsHandling/PointsManager.h"
+#include "PointsHandling/PointsManager.h"
 
 
 PointsManager::PointsManager()
