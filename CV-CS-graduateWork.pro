@@ -13,7 +13,8 @@ SOURCES +=  \
     src/VideoHandling/VideoFrame.cpp \
     src/VideoHandling/VideoTrackerPlayer.cpp \
     src/main.cpp \
-    src/ui/ImageWindow.cpp
+    src/ui/ImageWindow.cpp \
+    src/ui/ProcessingWindow.cpp
 
 INCLUDEPATH += $$PWD \
     include
@@ -25,10 +26,12 @@ HEADERS += \
     include/VideoHandling/CvFrameBufferHandler.h \
     include/VideoHandling/VideoFrame.h \
     include/VideoHandling/VideoTrackerPlayer.h \
-    include/ui/ImageWindow.h
+    include/ui/ImageWindow.h \
+    include/ui/ProcessingWindow.h
 
 FORMS += \
-    ui/mainwindow.ui
+    ui/imagewindow.ui \
+    ui/processingwindow.ui
 
 win32: LIBS += -L$$PWD/../../ThirdParty/opencv/opencv470_g/x64/mingw/lib/ -llibopencv_core470.dll -llibopencv_highgui470.dll -llibopencv_imgcodecs470.dll -llibopencv_optflow470.dll -llibopencv_imgproc470.dll -llibopencv_videoio470.dll -llibopencv_tracking470.dll
 

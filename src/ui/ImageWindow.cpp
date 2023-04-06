@@ -1,11 +1,11 @@
-#include "ui/ImageWindow.h"
-#include "ui_mainwindow.h"
+#include "ui/imagewindow.h"
+#include "ui_imagewindow.h"
 
 #include "VideoHandling/videoframe.h"
 
-MainWindow::MainWindow(QWidget *parent)
+ImageWindow::ImageWindow(QWidget *parent)
     : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
+    , ui(new Ui::ImageWindow)
 {
     VTPlayer = new VideoTrackerPlayer();
     QObject::connect(VTPlayer, SIGNAL(ToBeDisplayed(QImage)),
@@ -21,13 +21,13 @@ MainWindow::MainWindow(QWidget *parent)
                      this, SLOT(MouseLeftFrame()));
 }
 
-MainWindow::~MainWindow()
+ImageWindow::~ImageWindow()
 {
     delete VTPlayer;
     delete ui;
 }
 
-cv::Point2f MainWindow::MapToImageCoords(QSize map_size, cv::Size image_size, QPointF src_coords)
+cv::Point2f ImageWindow::MapToImageCoords(QSize map_size, cv::Size image_size, QPointF src_coords)
 {
     float xScale = static_cast<float>(image_size.width) / static_cast<float>(map_size.width());
     float yScale = static_cast<float>(image_size.height) / static_cast<float>(map_size.height());
@@ -38,7 +38,7 @@ cv::Point2f MainWindow::MapToImageCoords(QSize map_size, cv::Size image_size, QP
     return cv::Point2f(x, y);
 }
 
-void MainWindow::updatePlayerUI(QImage img)
+void ImageWindow::updatePlayerUI(QImage img)
 {
     if (!img.isNull())
     {
@@ -48,7 +48,7 @@ void MainWindow::updatePlayerUI(QImage img)
     }
 }
 
-void MainWindow::on_pushButton_clicked()
+void ImageWindow::on_pushButton_clicked()
 {
     QString filename = QFileDialog::getOpenFileName(this,
                                                     tr("Open Video"), ".",
@@ -64,7 +64,7 @@ void MainWindow::on_pushButton_clicked()
     }
 }
 
-void MainWindow::on_pushButton_2_clicked()
+void ImageWindow::on_pushButton_2_clicked()
 {
     if (VTPlayer->isStopped())
     {
@@ -78,12 +78,12 @@ void MainWindow::on_pushButton_2_clicked()
     }
 }
 
-void MainWindow::MouseCurrentPos()
+void ImageWindow::MouseCurrentPos()
 {
     ui->lblMousePos->setText(QString("X = %1, Y = %2").arg(ui->lblFrame->GetCurrentMousePos().x()).arg(ui->lblFrame->GetCurrentMousePos().x()));
 }
 
-void MainWindow::MousePressed()
+void ImageWindow::MousePressed()
 {
     // calculating difference between pixmap size and lblFrame size (in which pixmap is drawn)
     QSize lbl_pixmap_diff = ui->lblFrame->size() - ui->lblFrame->pixmap().size();
@@ -95,7 +95,7 @@ void MainWindow::MousePressed()
     VTPlayer->RefreshTrackCoords(obj_coords);
 }
 
-void MainWindow::MouseLeftFrame()
+void ImageWindow::MouseLeftFrame()
 {
 
 }

@@ -8,16 +8,16 @@
 #include "VideoHandling/VideoTrackerPlayer.h"
 
 QT_BEGIN_NAMESPACE
-namespace Ui { class MainWindow; }
+namespace Ui { class ImageWindow; }
 QT_END_NAMESPACE
 
-class MainWindow : public QMainWindow
+class ImageWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = nullptr);
-    ~MainWindow();
+    explicit ImageWindow(QWidget *parent = nullptr);
+    ~ImageWindow();
 
 private:
     cv::Point2f MapToImageCoords(QSize map_size, cv::Size image_size, QPointF src_coords);
@@ -40,7 +40,7 @@ private slots:
     void MouseLeftFrame();
 
 private:
-    Ui::MainWindow *ui;
+    Ui::ImageWindow *ui;
     VideoTrackerPlayer *VTPlayer;
 };
 #endif // IMAGEWINDOW_H
