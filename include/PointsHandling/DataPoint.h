@@ -10,7 +10,7 @@ public:
     DataPoint(cv::Point2f& point);
     ~DataPoint();
 
-    void DrawPoint(cv::Mat& frame);
+    void DrawPoint(cv::Mat& frame, bool drawArrow = false);
     void AddPos(cv::Point2f pos);
     cv::Point2f& GetLastPos();
 

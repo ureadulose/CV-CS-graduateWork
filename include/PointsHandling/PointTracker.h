@@ -4,6 +4,7 @@
 // OpenCV headers
 #include <opencv2/optflow.hpp>
 #include <opencv2/tracking.hpp>
+#include <opencv2/highgui.hpp>
 
 #include "PointsHandling/DataPoint.h"
 
@@ -17,9 +18,11 @@ public:
 	* @brief method_num: 0 - Farneback, 1 - HornSchunck
 	*/
     void Track(cv::Mat& frame1, cv::Mat& frame2, int method_num);
+    cv::Mat* GetOptflow();
 
 private:
     std::vector<DataPoint>& _pts_to_be_tracked;
+    cv::Mat _flow_frame;
 
 };
 

@@ -80,7 +80,7 @@ void ImageWindow::on_pushButton_2_clicked()
 
 void ImageWindow::MouseCurrentPos()
 {
-    ui->lblMousePos->setText(QString("X = %1, Y = %2").arg(ui->lblFrame->GetCurrentMousePos().x()).arg(ui->lblFrame->GetCurrentMousePos().x()));
+    ui->lblMousePos->setText(QString("X = %1, Y = %2").arg(ui->lblFrame->GetCurrentMousePos().x()).arg(ui->lblFrame->GetCurrentMousePos().y()));
 }
 
 void ImageWindow::MousePressed()

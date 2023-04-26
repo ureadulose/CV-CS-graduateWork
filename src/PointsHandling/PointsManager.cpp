@@ -39,7 +39,7 @@ void PointsManager::DrawPoints(cv::Mat &frame)
 {
     for (auto& point : _points)
     {
-        point.DrawPoint(frame);
+        point.DrawPoint(frame, true);
     }
 }
 
