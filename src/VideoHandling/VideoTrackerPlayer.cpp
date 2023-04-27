@@ -88,7 +88,7 @@ void VideoTrackerPlayer::run()
 
                 _PM_cap->TrackPoints(*_FBH_cap->GetPrevRgbFrame(), *_FBH_cap->GetCurrRgbFrame(), 0);
                 _PM_cap->CalculateDFourierTransforms();
-                _PM_cap->DrawPoints(*_FBH_cap->GetCurrRgbFrame());
+                _PM_cap->DrawPtsAndData(*_FBH_cap->GetCurrRgbFrame());
 
                 // DEBUG
                 auto end_time = std::chrono::high_resolution_clock::now();

@@ -21,7 +21,7 @@ public:
     bool Empty();
     void ClearPoints();
     void CalculateDFourierTransforms();
-    void DrawPoints(cv::Mat& frame);
+    void DrawPtsAndData(cv::Mat& frame);
 
     std::vector<DataPoint>& GetPoints();
 

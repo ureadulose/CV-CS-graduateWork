@@ -11,6 +11,7 @@ public:
     ~DataPoint();
 
     void DrawPoint(cv::Mat& frame, bool drawArrow = false);
+    void DrawData(cv::Mat& frame);
 
     void AddNewPosition(cv::Point2f pos);
     cv::Point2f& GetLastPos();

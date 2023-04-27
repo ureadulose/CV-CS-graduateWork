@@ -54,12 +54,12 @@ void PointsManager::CalculateDFourierTransforms()
     }
 }
 
-void PointsManager::DrawPoints(cv::Mat &frame)
+void PointsManager::DrawPtsAndData(cv::Mat &frame)
 {
     for (auto& point : _points)
     {
         point.DrawPoint(frame, true);
-
+        point.DrawData(frame);
     }
 }
 

@@ -35,6 +35,25 @@ void DataPoint::DrawPoint(cv::Mat &frame, bool drawArrow)
 
 }
 
+void DataPoint::DrawData(cv::Mat &frame)
+{
+    // text parameters
+    // TODO: replace it to a more suitable place
+    int font = cv::FONT_HERSHEY_PLAIN;
+    double font_scale = 1.5;
+    int thickness = 2;
+
+    putText(
+            frame,
+            "hz: ",
+            cv::Point(_last_pos.x + 15, _last_pos.y),
+            font,
+            font_scale,
+            cv::Scalar(0, 69, 255),
+            thickness
+        );
+}
+
 void DataPoint::AddNewPosition(cv::Point2f pos)
 {
     _last_pos = pos;
