@@ -4,6 +4,10 @@
 #include "opencv2/core/core.hpp"
 
 #include "include/PointsHandling/DataPoint.h"
+#include "include/PointsHandling/PointTracker.h"
+
+// for debug purposes
+#include <iostream>
 
 class PointsManager
 {
@@ -11,12 +15,13 @@ public:
     PointsManager();
     ~PointsManager();
 
+    cv::Point2f TrackPoints(cv::Mat& frame1, cv::Mat& frame2, int method_num);
     void AddPoint(cv::Point2f& point);
     void RemovePoint(size_t idx);
     bool Empty();
     void ClearPoints();
-    void DrawPoints(cv::Mat& frame);
     void CalculateDFourierTransforms();
+    void DrawPoints(cv::Mat& frame);
 
     std::vector<DataPoint>& GetPoints();
 
@@ -24,6 +29,7 @@ public:
 //    std::vector<double>& GetDFTs();
 
 private:
+    PointTracker* _PT_cap;
     std::vector<DataPoint> _points;
 };
 

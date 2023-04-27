@@ -9,8 +9,6 @@ VideoTrackerPlayer::VideoTrackerPlayer(QObject *parent) :
     _FBH_cap_created{ false }
 {
     _PM_cap = new PointsManager();
-    // passing a link for a DataPoint vector which is handled in PointsManager and will be tracked in PointTracker
-    _PT_cap = new PointTracker(_PM_cap->GetPoints());
 }
 
 VideoTrackerPlayer::~VideoTrackerPlayer()
@@ -25,7 +23,6 @@ VideoTrackerPlayer::~VideoTrackerPlayer()
     _cond.wakeOne();
     _mutex.unlock();
 
-    delete _PT_cap;
     delete _PM_cap;
 }
 
@@ -85,8 +82,20 @@ void VideoTrackerPlayer::run()
 
         if (!_PM_cap->Empty())
             {
-                _PT_cap->Track(*_FBH_cap->GetPrevRgbFrame(), *_FBH_cap->GetCurrRgbFrame(), 0);
+                // DEBUG
+                auto start_time = std::chrono::high_resolution_clock::now();
+                // DEBUG END
+
+                _PM_cap->TrackPoints(*_FBH_cap->GetPrevRgbFrame(), *_FBH_cap->GetCurrRgbFrame(), 0);
+                _PM_cap->CalculateDFourierTransforms();
                 _PM_cap->DrawPoints(*_FBH_cap->GetCurrRgbFrame());
+
+                // DEBUG
+                auto end_time = std::chrono::high_resolution_clock::now();
+                auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count();
+                std::string result = "Time consuming: " + std::to_string(duration) + " us";
+                std::cout << result << std::endl;
+                // DEBUG END
             }
 
         cv::cvtColor(*_cvFrame, *_cvFrame, cv::COLOR_BGR2RGB);

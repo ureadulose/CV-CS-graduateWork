@@ -14,6 +14,7 @@ DataPoint::~DataPoint()
 
 void DataPoint::DrawPoint(cv::Mat &frame, bool drawArrow)
 {
+    // draw mark of a point
     if (!drawArrow)
     {
         cv::circle(frame, _last_pos, _radius, _color, -1);
@@ -29,9 +30,12 @@ void DataPoint::DrawPoint(cv::Mat &frame, bool drawArrow)
         cv::fillConvexPoly(frame, triangle, 3, _color);
         cv::circle(frame, cv::Point(_last_pos.x + offset, _last_pos.y - offset), _radius, _color, -1);
     }
+
+    // draw current frequency of a point
+
 }
 
-void DataPoint::AddPos(cv::Point2f pos)
+void DataPoint::AddNewPosition(cv::Point2f pos)
 {
     _last_pos = pos;
     _positions.emplace_back(pos);
@@ -42,17 +46,15 @@ cv::Point2f& DataPoint::GetLastPos()
     return _last_pos;
 }
 
-std::vector<double> &DataPoint::GetDFourierTransform()
+void DataPoint::CalculateDFT()
 {
     if (_ft.empty())
     {
-        CalculateDFourierTransform();
+        // actions for first usage of a point
     }
-    return _ft;
 }
 
-void DataPoint::CalculateDFourierTransform()
+float DataPoint::GetMainFreq()
 {
-    // TODO: Implement fourier transform calculation for this point
-    //       and store the result in _ft member variable
+    return _curr_frequency;
 }

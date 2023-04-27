@@ -3,10 +3,12 @@
 
 // my headers
 #include "VideoHandling/CvFrameBufferHandler.h"
-#include "PointsHandling/PointTracker.h"
 #include "PointsHandling/PointsManager.h"
 
 #include <QImage>
+
+// for debug purposes
+#include <chrono>
 
 /*!
 * @brief Class is meant to be a shell for the whole app
@@ -40,7 +42,6 @@ protected:
 
 private:
     CvFrameBufferHandler* _FBH_cap;
-    PointTracker* _PT_cap;
     PointsManager* _PM_cap;
 
     bool _stop;

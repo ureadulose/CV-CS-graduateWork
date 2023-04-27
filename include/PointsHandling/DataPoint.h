@@ -11,13 +11,19 @@ public:
     ~DataPoint();
 
     void DrawPoint(cv::Mat& frame, bool drawArrow = false);
-    void AddPos(cv::Point2f pos);
+
+    void AddNewPosition(cv::Point2f pos);
     cv::Point2f& GetLastPos();
 
-    std::vector<double>& GetDFourierTransform();
+    void CalculateDFT();
+
+    /*!
+     * \brief Returns frequency with maximum amplitude from DFT
+     * \return frequency
+     */
+    float GetMainFreq();
 
 private:
-    void CalculateDFourierTransform();
 
 private:
     cv::Point2f _last_pos;
