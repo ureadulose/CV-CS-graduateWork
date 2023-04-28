@@ -32,6 +32,7 @@ bool VideoTrackerPlayer::LoadVideo(std::string filename)
     if (!_FBH_cap->Exists())
         return false;
     _framerate = _FBH_cap->GetFramerate();
+    _PM_cap->UpdateSamplerate(_framerate);
     _FBH_cap_created = true;
     return true;
 }

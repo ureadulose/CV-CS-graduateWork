@@ -1,7 +1,8 @@
 #include "PointsHandling/DataPoint.h"
 
-DataPoint::DataPoint(cv::Point2f& point) :
-    _last_pos{ point }
+DataPoint::DataPoint(cv::Point2f& point, float& sample_rate) :
+    _last_pos{ point },
+    _sample_rate{ sample_rate }
 {
     _radius = 10;
     _color = cv::Scalar(255, 255, 255);
@@ -58,6 +59,11 @@ void DataPoint::AddNewPosition(cv::Point2f pos)
 {
     _last_pos = pos;
     _positions.emplace_back(pos);
+
+    if (_positions.size() > MAX_POSITIONS_AMOUNT)
+    {
+        _positions.erase(_positions.begin());
+    }
 }
 
 cv::Point2f& DataPoint::GetLastPos()
@@ -67,10 +73,33 @@ cv::Point2f& DataPoint::GetLastPos()
 
 void DataPoint::CalculateDFT()
 {
-    if (_ft.empty())
+    const int samples_amount = _positions.size();
+
+    // Creating coordinates matrix
+    cv::Mat mat_positions(samples_amount, 2, CV_32FC2);
+
+    for (int i = 0; i < samples_amount; i++)
     {
-        // actions for first usage of a point
+        mat_positions.at<float>(i, 0) = _positions[i].x;
+        mat_positions.at<float>(i, 1) = _positions[i].y;
     }
+
+    cv::Mat mat_transformed;
+    cv::dft(mat_positions, mat_transformed, cv::DFT_COMPLEX_OUTPUT);
+
+    cv::Mat mat_magnitude;
+    cv::magnitude(mat_transformed.col(0), mat_transformed.col(1), mat_magnitude);
+
+    std::vector<cv::Mat> channels;
+    cv::split(mat_magnitude, channels);
+
+    double max_val_x, max_val_y;
+    cv::minMaxLoc(channels[0], nullptr, &max_val_x);
+    cv::minMaxLoc(channels[1], nullptr, &max_val_y);
+    double freq_x = max_val_x * _sample_rate / samples_amount;
+    double freq_y = max_val_y * _sample_rate / samples_amount;
+
+    std::cout << "curr frequency: " << _curr_frequency << std::endl;
 }
 
 float DataPoint::GetMainFreq()

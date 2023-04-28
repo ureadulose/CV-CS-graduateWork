@@ -4,10 +4,15 @@
 #include "opencv2/core/core.hpp"
 #include <opencv2/imgproc.hpp>
 
+// for debug purposes
+#include <iostream>
+
+const int MAX_POSITIONS_AMOUNT = 512;
+
 class DataPoint
 {
 public:
-    DataPoint(cv::Point2f& point);
+    DataPoint(cv::Point2f& point, float& sample_rate);
     ~DataPoint();
 
     void DrawPoint(cv::Mat& frame, bool drawArrow = false);
@@ -33,6 +38,7 @@ private:
     int _radius;
     cv::Scalar _color;
 
+    float _sample_rate;
     std::vector<double> _ft;
     float _curr_frequency;
 };

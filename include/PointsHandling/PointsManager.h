@@ -15,6 +15,8 @@ public:
     PointsManager();
     ~PointsManager();
 
+    void UpdateSamplerate(float sample_rate);
+
     cv::Point2f TrackPoints(cv::Mat& frame1, cv::Mat& frame2, int method_num);
     void AddPoint(cv::Point2f& point);
     void RemovePoint(size_t idx);
@@ -29,6 +31,8 @@ public:
 //    std::vector<double>& GetDFTs();
 
 private:
+    float _sample_rate;
+
     PointTracker* _PT_cap;
     std::vector<DataPoint> _points;
 };

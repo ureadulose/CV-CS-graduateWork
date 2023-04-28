@@ -12,6 +12,11 @@ PointsManager::~PointsManager()
     delete _PT_cap;
 }
 
+void PointsManager::UpdateSamplerate(float sample_rate)
+{
+    _sample_rate = sample_rate;
+}
+
 cv::Point2f PointsManager::TrackPoints(cv::Mat &frame1, cv::Mat &frame2, int method_num)
 {
     _PT_cap->Track(frame1, frame2, 0);
@@ -20,7 +25,7 @@ cv::Point2f PointsManager::TrackPoints(cv::Mat &frame1, cv::Mat &frame2, int met
 void PointsManager::AddPoint(cv::Point2f &point)
 {
     // TODO: try push_back and see the difference
-    _points.emplace_back(point);
+    _points.emplace_back(point, _sample_rate);
 }
 
 void PointsManager::RemovePoint(size_t idx)
