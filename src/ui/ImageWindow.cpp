@@ -19,6 +19,9 @@ ImageWindow::ImageWindow(QWidget *parent)
                      this, SLOT(MousePressed()));
     QObject::connect(ui->lblFrame, SIGNAL(MouseLeftFrameSignal()),
                      this, SLOT(MouseLeftFrame()));
+
+    // maybe one day ill change it to overriding resizeEvent() signal so the image would be resize while video is paused.
+    ui->lblFrame->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
 }
 
 ImageWindow::~ImageWindow()
@@ -43,7 +46,7 @@ void ImageWindow::updatePlayerUI(QImage img)
     if (!img.isNull())
     {
         ui->lblFrame->setAlignment(Qt::AlignCenter);
-        ui->lblFrame->setPixmap(QPixmap::fromImage(img).scaled(ui->lblFrame->size(),
+        ui->lblFrame->setPixmap(QPixmap::fromImage(img).scaled(ui->lblFrame->width()-0.1, ui->lblFrame->height()-0.1/*ui->lblFrame->size()*/,
                                                             Qt::KeepAspectRatio, Qt::FastTransformation));
     }
 }
