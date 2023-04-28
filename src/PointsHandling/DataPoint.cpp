@@ -73,33 +73,49 @@ cv::Point2f& DataPoint::GetLastPos()
 
 void DataPoint::CalculateDFT()
 {
-    const int samples_amount = _positions.size();
+    const size_t samples_amount = _positions.size();
+    std::vector<cv::Point2f> p2;
+    std::vector<cv::Point2f> p1;
 
-    // Creating coordinates matrix
-    cv::Mat mat_positions(samples_amount, 2, CV_32FC2);
+    std::vector<cv::Point2f> normalized_positions;
+    cv::normalize(_positions, normalized_positions, 0, 1, cv::NORM_MINMAX);
 
-    for (int i = 0; i < samples_amount; i++)
+    cv::dft(normalized_positions, _ft);
+
+    // computing two-sided spectrum P2
+    for (size_t i = 0; i < _ft.size(); i++)
     {
-        mat_positions.at<float>(i, 0) = _positions[i].x;
-        mat_positions.at<float>(i, 1) = _positions[i].y;
+        p2.push_back(cv::Point2f(_ft[i].x / (float)(samples_amount), _ft[i].y / (float)(samples_amount)));
     }
 
-    cv::Mat mat_transformed;
-    cv::dft(mat_positions, mat_transformed, cv::DFT_COMPLEX_OUTPUT);
+    // computing single-sided spectrum p1 based on p2 and even-valued signal length
+    for (size_t i = 0; i < samples_amount; i++)
+    {
+        size_t idx = 0;
+        idx = (size_t)(((double)(i)) / 2.0 + 1.0);
+        p1.push_back(p2[idx]);
+    }
 
-    cv::Mat mat_magnitude;
-    cv::magnitude(mat_transformed.col(0), mat_transformed.col(1), mat_magnitude);
+    // possible frequencies
+    std::vector<float> freqs;
+    for(size_t i = 0; i < samples_amount; i++)
+    {
+        float tmp = _sample_rate * ((float)(i) / 2.f) / (float)(samples_amount);
+        freqs.push_back(tmp);
+    }
 
-    std::vector<cv::Mat> channels;
-    cv::split(mat_magnitude, channels);
+    // computing magnitude
+    std::vector<float> magnitudes;
+    for (size_t i = 0; i < samples_amount; i++)
+    {
+        float current_magnitude = sqrt(p1[i].x * p1[i].x + p1[i].y * p1[i].y);
+        magnitudes.push_back(current_magnitude);
+    }
 
-    double max_val_x, max_val_y;
-    cv::minMaxLoc(channels[0], nullptr, &max_val_x);
-    cv::minMaxLoc(channels[1], nullptr, &max_val_y);
-    double freq_x = max_val_x * _sample_rate / samples_amount;
-    double freq_y = max_val_y * _sample_rate / samples_amount;
-
-    std::cout << "curr frequency: " << _curr_frequency << std::endl;
+    // finding max value in magnitudes vector
+    auto itt_max = std::max_element(magnitudes.begin(), magnitudes.end());
+    int max_idx = std::distance(magnitudes.begin(), itt_max);
+    std::cout << freqs[max_idx] << std::endl;
 }
 
 float DataPoint::GetMainFreq()

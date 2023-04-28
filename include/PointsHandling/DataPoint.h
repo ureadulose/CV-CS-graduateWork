@@ -39,7 +39,7 @@ private:
     cv::Scalar _color;
 
     float _sample_rate;
-    std::vector<double> _ft;
+    std::vector<cv::Point2f> _ft;
     float _curr_frequency;
 };
 
