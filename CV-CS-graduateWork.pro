@@ -13,6 +13,7 @@ SOURCES +=  \
     src/VideoHandling/VideoFrame.cpp \
     src/VideoHandling/VideoTrackerPlayer.cpp \
     src/main.cpp \
+    src/ui/AmSpectrDialog.cpp \
     src/ui/ImageWindow.cpp \
     src/ui/ProcessingWindow.cpp
 
@@ -26,10 +27,12 @@ HEADERS += \
     include/VideoHandling/CvFrameBufferHandler.h \
     include/VideoHandling/VideoFrame.h \
     include/VideoHandling/VideoTrackerPlayer.h \
+    include/ui/AmSpectrDialog.h \
     include/ui/ImageWindow.h \
     include/ui/ProcessingWindow.h
 
 FORMS += \
+    ui/amspectrdialog.ui \
     ui/imagewindow.ui \
     ui/processingwindow.ui
 
