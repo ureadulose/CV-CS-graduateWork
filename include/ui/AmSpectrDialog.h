@@ -2,7 +2,7 @@
 #define AMSPECTRDIALOG_H
 
 #include <QDialog>
-
+#include "QCustomPlot/qcustomplot.h"
 #include "opencv2/core.hpp"
 
 QT_BEGIN_NAMESPACE

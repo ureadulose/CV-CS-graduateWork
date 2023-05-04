@@ -1,4 +1,4 @@
-QT       += core gui
+QT       += core gui printsupport
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -9,6 +9,7 @@ SOURCES +=  \
     src/PointsHandling/DataPoint.cpp \
     src/PointsHandling/PointTracker.cpp \
     src/PointsHandling/PointsManager.cpp \
+    src/QCustomPlot/qcustomplot.cpp \
     src/VideoHandling/CvFrameBufferHandler.cpp \
     src/VideoHandling/VideoFrame.cpp \
     src/VideoHandling/VideoTrackerPlayer.cpp \
@@ -24,6 +25,7 @@ HEADERS += \
     include/PointsHandling/DataPoint.h \
     include/PointsHandling/PointTracker.h \
     include/PointsHandling/PointsManager.h \
+    include/QCustomPlot/qcustomplot.h \
     include/VideoHandling/CvFrameBufferHandler.h \
     include/VideoHandling/VideoFrame.h \
     include/VideoHandling/VideoTrackerPlayer.h \
