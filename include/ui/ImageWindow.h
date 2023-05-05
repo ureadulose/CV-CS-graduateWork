@@ -6,6 +6,7 @@
 #include <QMessageBox>
 
 #include "VideoHandling/VideoTrackerPlayer.h"
+#include "EventType.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class ImageWindow; }
@@ -20,7 +21,12 @@ public:
     ~ImageWindow();
 
 private:
+    // refactor this
     cv::Point2f MapToImageCoords(QSize map_size, cv::Size image_size, QPointF src_coords);
+
+signals:
+    void NewClick(EventType ev, const cv::Point2f coordinates);
+    void NewMousePos(EventType ev, const cv::Point2f coordinates);
 
 private slots:
     // Display video frame in player UI

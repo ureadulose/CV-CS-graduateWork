@@ -22,21 +22,28 @@ cv::Point2f PointsManager::TrackPoints(cv::Mat &frame1, cv::Mat &frame2, int met
     _PT_cap->Track(frame1, frame2, 0);
 }
 
-void PointsManager::AddPoint(cv::Point2f &point)
+void PointsManager::ManageNewCoords(EventType ev, cv::Point2f &coords)
 {
-    // TODO: try push_back and see the difference
-    _points.emplace_back(point, _sample_rate);
-}
+    bool result = false;
+    //std::vector<int> hit_idxs;
 
-void PointsManager::RemovePoint(size_t idx)
-{
-    if (idx < _points.size())
+    for (auto& point : _points)
     {
-        _points.erase(_points.begin() + idx);
+        if (point.HitTest(coords))
+            result = true;
     }
-    std::cout << "capacity: " << _points.capacity() << std::endl;
-    std::cout << "max_size: " << _points.max_size() << std::endl;
-    std::cout << "current size: " << _points.size() << std::endl;
+
+    if (ev != EventType::MouseClick)
+        return;
+
+    if (!result)
+    {
+        AddPoint(coords);
+    }
+    else
+    {
+        // open spectrum dialog
+    }
 }
 
 bool PointsManager::Empty()
@@ -71,6 +78,23 @@ void PointsManager::DrawPtsAndData(cv::Mat &frame)
 std::vector<DataPoint> &PointsManager::GetPoints()
 {
     return _points;
+}
+
+void PointsManager::AddPoint(cv::Point2f &point)
+{
+    // TODO: try push_back and see the difference
+    _points.emplace_back(point, _sample_rate);
+}
+
+void PointsManager::RemovePoint(size_t idx)
+{
+    if (idx < _points.size())
+    {
+        _points.erase(_points.begin() + idx);
+    }
+    std::cout << "capacity: " << _points.capacity() << std::endl;
+    std::cout << "max_size: " << _points.max_size() << std::endl;
+    std::cout << "current size: " << _points.size() << std::endl;
 }
 
 // TODO:

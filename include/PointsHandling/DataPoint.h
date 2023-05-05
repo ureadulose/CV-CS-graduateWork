@@ -8,6 +8,10 @@
 #include <iostream>
 
 const int MAX_POSITIONS_AMOUNT = 512;
+const int INTERACTION_OFFSET = 16;
+const int font = cv::FONT_HERSHEY_PLAIN;
+const double font_scale = 1.5;
+const int font_thickness = 2;
 
 class DataPoint
 {
@@ -18,18 +22,24 @@ public:
     void DrawPoint(cv::Mat& frame, bool drawArrow = false);
     void DrawData(cv::Mat& frame);
 
+    // try &
     void AddNewPosition(cv::Point2f pos);
-    cv::Point2f& GetLastPos();
 
     void CalculateDFT();
 
+    bool HitTest(cv::Point2f& point);
+
+    cv::Point2f& GetLastPos();
     /*!
      * \brief Returns frequency with maximum amplitude from DFT
      * \return frequency
      */
-    float GetMainFreq();
+    float& GetMainFreq();
+    cv::Rect& GetRoi();
+
 
 private:
+    void UpdateROI();
 
 private:
     cv::Point2f _last_pos;
@@ -37,6 +47,8 @@ private:
 
     int _radius;
     cv::Scalar _color;
+    cv::Rect _roi;
+    bool _interacting;
 
     float _sample_rate;
     std::vector<cv::Point2f> _ft;

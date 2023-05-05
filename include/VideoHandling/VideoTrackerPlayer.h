@@ -4,8 +4,10 @@
 // my headers
 #include "VideoHandling/CvFrameBufferHandler.h"
 #include "PointsHandling/PointsManager.h"
+#include "EventType.h"
 
 #include <QImage>
+#include <QMainWindow>
 
 // for debug purposes
 #include <chrono>
@@ -18,16 +20,13 @@ class VideoTrackerPlayer : public QThread
     Q_OBJECT
 
 public:
-    VideoTrackerPlayer(QObject *parent = 0);
+    VideoTrackerPlayer(QMainWindow *image_window, QObject *parent = 0);
     ~VideoTrackerPlayer();
 
     bool LoadVideo(std::string filename);
     void Play();
     void Stop();
     bool isStopped() const;
-
-    void RefreshTrackCoords(cv::Point2f obj_coords);
-
     // Video Parameters
     cv::Size GetFrameSize();
 
@@ -39,10 +38,14 @@ protected:
     void run();
     void msleep(int ms);
 
+private slots:
+    void HandleMouseEvent(EventType ev, cv::Point2f obj_coords);
 
 private:
     CvFrameBufferHandler* _FBH_cap;
     PointsManager* _PM_cap;
+
+    QMainWindow* _image_window;
 
     bool _stop;
     QMutex _mutex;

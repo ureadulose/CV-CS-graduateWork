@@ -1,14 +1,22 @@
 #include "VideoHandling/VideoTrackerPlayer.h"
 
+#include "ui/ImageWindow.h"
+
 // for CV waiter implementation
 //constexpr double INTERVAL_IN_MS = 25;
 
-VideoTrackerPlayer::VideoTrackerPlayer(QObject *parent) :
+VideoTrackerPlayer::VideoTrackerPlayer(QMainWindow *image_window, QObject *parent) :
     QThread(parent),
+    _image_window{ image_window },
     _stop{ true },
     _FBH_cap_created{ false }
 {
     _PM_cap = new PointsManager();
+
+    QObject::connect(_image_window, SIGNAL(NewClick(EventType, cv::Point2f)),
+                     this, SLOT(HandleMouseEvent(EventType, cv::Point2f)));
+    QObject::connect(_image_window, SIGNAL(NewMousePos(EventType, cv::Point2f)),
+                     this, SLOT(HandleMouseEvent(EventType, cv::Point2f)));
 }
 
 VideoTrackerPlayer::~VideoTrackerPlayer()
@@ -58,15 +66,14 @@ bool VideoTrackerPlayer::isStopped() const
     return this->_stop;
 }
 
-void VideoTrackerPlayer::RefreshTrackCoords(cv::Point2f obj_coords)
-{
-    // TODO: have to recode this later but for now it's like this:
-    this->_PM_cap->AddPoint(obj_coords);
-}
-
 cv::Size VideoTrackerPlayer::GetFrameSize()
 {
     return _FBH_cap->GetFrameSize();
+}
+
+void VideoTrackerPlayer::HandleMouseEvent(EventType ev, cv::Point2f obj_coords)
+{
+    this->_PM_cap->ManageNewCoords(ev, obj_coords);
 }
 
 void VideoTrackerPlayer::run()
@@ -87,6 +94,7 @@ void VideoTrackerPlayer::run()
                 auto start_time = std::chrono::high_resolution_clock::now();
                 // DEBUG END
 
+                // Put this to PM, not here
                 _PM_cap->TrackPoints(*_FBH_cap->GetPrevRgbFrame(), *_FBH_cap->GetCurrRgbFrame(), 0);
                 _PM_cap->CalculateDFourierTransforms();
                 _PM_cap->DrawPtsAndData(*_FBH_cap->GetCurrRgbFrame());

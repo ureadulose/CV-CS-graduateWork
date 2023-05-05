@@ -7,7 +7,7 @@ ImageWindow::ImageWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::ImageWindow)
 {
-    VTPlayer = new VideoTrackerPlayer();
+    VTPlayer = new VideoTrackerPlayer(this);
     QObject::connect(VTPlayer, SIGNAL(ToBeDisplayed(QImage)),
                      this, SLOT(updatePlayerUI(QImage)));
 
@@ -84,6 +84,17 @@ void ImageWindow::on_pushButton_2_clicked()
 void ImageWindow::MouseCurrentPos()
 {
     ui->lblMousePos->setText(QString("X = %1, Y = %2").arg(ui->lblFrame->GetCurrentMousePos().x()).arg(ui->lblFrame->GetCurrentMousePos().y()));
+    if (!VTPlayer->isStopped())
+    {
+        // calculating difference between pixmap size and lblFrame size (in which pixmap is drawn)
+        QSize lbl_pixmap_diff = ui->lblFrame->size() - ui->lblFrame->pixmap().size();
+        // calculating target point which is equal to (click coordinates - difference)
+        QPointF target = QPointF(ui->lblFrame->GetCurrentMousePos().x() - lbl_pixmap_diff.width(), ui->lblFrame->GetCurrentMousePos().y() - lbl_pixmap_diff.height() / 2);
+        // translating to framesize-based coordinates
+        cv::Point2f obj_coords = MapToImageCoords(ui->lblFrame->pixmap().size(), VTPlayer->GetFrameSize(), target);
+
+        emit NewMousePos(EventType::MouseMove, obj_coords);
+    }
 }
 
 void ImageWindow::MousePressed()
@@ -95,7 +106,7 @@ void ImageWindow::MousePressed()
     // translating to framesize-based coordinates
     cv::Point2f obj_coords = MapToImageCoords(ui->lblFrame->pixmap().size(), VTPlayer->GetFrameSize(), target);
 
-    VTPlayer->RefreshTrackCoords(obj_coords);
+    emit NewClick(EventType::MouseClick, obj_coords);
 }
 
 void ImageWindow::MouseLeftFrame()

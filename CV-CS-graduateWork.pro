@@ -22,6 +22,7 @@ INCLUDEPATH += $$PWD \
     include
 
 HEADERS += \
+    include/EventType.h \
     include/PointsHandling/DataPoint.h \
     include/PointsHandling/PointTracker.h \
     include/PointsHandling/PointsManager.h \

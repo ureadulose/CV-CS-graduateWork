@@ -6,6 +6,8 @@ DataPoint::DataPoint(cv::Point2f& point, float& sample_rate) :
 {
     _radius = 10;
     _color = cv::Scalar(255, 255, 255);
+    UpdateROI();
+    _interacting = false;
 }
 
 DataPoint::~DataPoint()
@@ -32,18 +34,14 @@ void DataPoint::DrawPoint(cv::Mat &frame, bool drawArrow)
         cv::circle(frame, cv::Point(_last_pos.x + offset, _last_pos.y - offset), _radius, _color, -1);
     }
 
-    // draw current frequency of a point
-
+    if (_interacting)
+    {
+        cv::rectangle(frame, _roi, _color, 5);
+    }
 }
 
 void DataPoint::DrawData(cv::Mat &frame)
 {
-    // text parameters
-    // TODO: replace it to a more suitable place
-    int font = cv::FONT_HERSHEY_PLAIN;
-    double font_scale = 1.5;
-    int thickness = 2;
-
     putText(
             frame,
             "hz: ",
@@ -51,7 +49,7 @@ void DataPoint::DrawData(cv::Mat &frame)
             font,
             font_scale,
             cv::Scalar(0, 69, 255),
-            thickness
+            font_thickness
         );
 }
 
@@ -59,16 +57,12 @@ void DataPoint::AddNewPosition(cv::Point2f pos)
 {
     _last_pos = pos;
     _positions.emplace_back(pos);
+    UpdateROI();
 
     if (_positions.size() > MAX_POSITIONS_AMOUNT)
     {
         _positions.erase(_positions.begin());
     }
-}
-
-cv::Point2f& DataPoint::GetLastPos()
-{
-    return _last_pos;
 }
 
 void DataPoint::CalculateDFT()
@@ -118,7 +112,39 @@ void DataPoint::CalculateDFT()
     std::cout << freqs[max_idx] << std::endl;
 }
 
-float DataPoint::GetMainFreq()
+bool DataPoint::HitTest(cv::Point2f &point)
+{
+    if (_roi.contains(point))
+    {
+        _interacting = true;
+        return true;
+    }
+    else
+    {
+        _interacting = false;
+        return false;
+    }
+}
+
+cv::Point2f& DataPoint::GetLastPos()
+{
+    return _last_pos;
+}
+
+float &DataPoint::GetMainFreq()
 {
     return _curr_frequency;
+}
+
+cv::Rect &DataPoint::GetRoi()
+{
+    return _roi;
+}
+
+void DataPoint::UpdateROI()
+{
+    _roi = cv::Rect(
+                cv::Point(_last_pos.x - INTERACTION_OFFSET, _last_pos.y - INTERACTION_OFFSET),
+                cv::Point(_last_pos.x + INTERACTION_OFFSET, _last_pos.y + INTERACTION_OFFSET)
+                );
 }
