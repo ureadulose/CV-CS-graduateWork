@@ -9,6 +9,7 @@ SOURCES +=  \
     src/PointsHandling/DataPoint.cpp \
     src/PointsHandling/PointTracker.cpp \
     src/PointsHandling/PointsManager.cpp \
+    src/QCustomPlot/PlotThread.cpp \
     src/QCustomPlot/qcustomplot.cpp \
     src/VideoHandling/CvFrameBufferHandler.cpp \
     src/VideoHandling/VideoFrame.cpp \
@@ -26,6 +27,7 @@ HEADERS += \
     include/PointsHandling/DataPoint.h \
     include/PointsHandling/PointTracker.h \
     include/PointsHandling/PointsManager.h \
+    include/QCustomPlot/PlotThread.h \
     include/QCustomPlot/qcustomplot.h \
     include/VideoHandling/CvFrameBufferHandler.h \
     include/VideoHandling/VideoFrame.h \

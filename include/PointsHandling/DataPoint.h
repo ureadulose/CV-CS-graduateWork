@@ -4,6 +4,9 @@
 #include "opencv2/core/core.hpp"
 #include <opencv2/imgproc.hpp>
 
+#include "QCustomPlot/PlotThread.h"
+#include <QObject>
+
 // for debug purposes
 #include <iostream>
 
@@ -13,11 +16,15 @@ const int font = cv::FONT_HERSHEY_PLAIN;
 const double font_scale = 1.5;
 const int font_thickness = 2;
 
-class DataPoint
+class DataPoint : public QObject
 {
+    Q_OBJECT
+
 public:
-    DataPoint(cv::Point2f& point, float& sample_rate);
+    DataPoint(cv::Point2f& point, float& sample_rate, QObject *parent = nullptr);
     ~DataPoint();
+
+    void ShowSpectrum();
 
     void DrawPoint(cv::Mat& frame, bool drawArrow = false);
     void DrawData(cv::Mat& frame);
@@ -37,11 +44,15 @@ public:
     float& GetMainFreq();
     cv::Rect& GetRoi();
 
+private slots:
+    void FreePlotThread();
 
 private:
     void UpdateROI();
 
 private:
+    PlotThread *_plot_thread;
+
     cv::Point2f _last_pos;
     std::vector<cv::Point2f> _positions;
 
@@ -53,6 +64,10 @@ private:
     float _sample_rate;
     std::vector<cv::Point2f> _ft;
     float _curr_frequency;
+
+    // probably temporary
+    std::vector<float> _magnitudes;
+    std::vector<float> _freqs;
 };
 
 #endif // DATA_POINT_H

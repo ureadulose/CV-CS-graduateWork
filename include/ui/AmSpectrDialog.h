@@ -19,7 +19,16 @@ public:
 
     void PlotData(std::vector<cv::Point2f> points_to_be_plotted);
 
+signals:
+    void ToBeClosed();
+
+private slots:
+    void closeEvent(QCloseEvent *ev);
+
 private:
+    //std::vector<float> &_x;
+    //std::vector<float> &_y;
+
     Ui::AmSpectrDialog *ui;
 };
 

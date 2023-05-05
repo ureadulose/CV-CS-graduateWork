@@ -29,8 +29,15 @@ void PointsManager::ManageNewCoords(EventType ev, cv::Point2f &coords)
 
     for (auto& point : _points)
     {
-        if (point.HitTest(coords))
+        if (point->HitTest(coords))
+        {
             result = true;
+            if (ev == EventType::MouseClick)
+            {
+                point->ShowSpectrum();
+                //emit DrawSpectrum();
+            }
+        }
     }
 
     if (ev != EventType::MouseClick)
@@ -39,10 +46,6 @@ void PointsManager::ManageNewCoords(EventType ev, cv::Point2f &coords)
     if (!result)
     {
         AddPoint(coords);
-    }
-    else
-    {
-        // open spectrum dialog
     }
 }
 
@@ -61,8 +64,7 @@ void PointsManager::CalculateDFourierTransforms()
     for (auto& point : _points)
     {
         // call DFT for each point
-        point.CalculateDFT();
-        //std::cout << "calculating DFT..." << std::endl;
+        point->CalculateDFT();
     }
 }
 
@@ -70,12 +72,12 @@ void PointsManager::DrawPtsAndData(cv::Mat &frame)
 {
     for (auto& point : _points)
     {
-        point.DrawPoint(frame, true);
-        point.DrawData(frame);
+        point->DrawPoint(frame, true);
+        point->DrawData(frame);
     }
 }
 
-std::vector<DataPoint> &PointsManager::GetPoints()
+std::vector<QPointer<DataPoint>> &PointsManager::GetPoints()
 {
     return _points;
 }
@@ -83,7 +85,8 @@ std::vector<DataPoint> &PointsManager::GetPoints()
 void PointsManager::AddPoint(cv::Point2f &point)
 {
     // TODO: try push_back and see the difference
-    _points.emplace_back(point, _sample_rate);
+    QPointer<DataPoint> p = new DataPoint(point, _sample_rate);
+    _points.emplace_back(p);
 }
 
 void PointsManager::RemovePoint(size_t idx)

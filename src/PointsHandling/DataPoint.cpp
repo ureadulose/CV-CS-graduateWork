@@ -1,18 +1,33 @@
 #include "PointsHandling/DataPoint.h"
 
-DataPoint::DataPoint(cv::Point2f& point, float& sample_rate) :
+DataPoint::DataPoint(cv::Point2f& point, float& sample_rate, QObject *parent) :
+    QObject(parent),
     _last_pos{ point },
+    _radius { 10 },
+    _color { cv::Scalar(255, 255, 255) },
+    _interacting { false },
     _sample_rate{ sample_rate }
 {
-    _radius = 10;
-    _color = cv::Scalar(255, 255, 255);
     UpdateROI();
-    _interacting = false;
+    // Выделение памяти под новый поток PlotThread
+    _plot_thread = new PlotThread(_sample_rate);
+    QObject::connect(_plot_thread, SIGNAL(StopThread),
+                     this, SLOT(FreePlotThread));
+
+    // probably temporary 2
+    _magnitudes = std::vector<float>();
+    _freqs = std::vector<float>();
 }
 
 DataPoint::~DataPoint()
 {
 
+}
+
+void DataPoint::ShowSpectrum()
+{
+    // Запуск нового потока PlotThread
+    _plot_thread->start();
 }
 
 void DataPoint::DrawPoint(cv::Mat &frame, bool drawArrow)
@@ -106,10 +121,14 @@ void DataPoint::CalculateDFT()
         magnitudes.push_back(current_magnitude);
     }
 
+    _freqs = freqs;
+    _magnitudes = magnitudes;
+
     // finding max value in magnitudes vector
     auto itt_max = std::max_element(magnitudes.begin(), magnitudes.end());
     int max_idx = std::distance(magnitudes.begin(), itt_max);
-    std::cout << freqs[max_idx] << std::endl;
+    // debug
+    //std::cout << freqs[max_idx] << std::endl;
 }
 
 bool DataPoint::HitTest(cv::Point2f &point)
@@ -139,6 +158,11 @@ float &DataPoint::GetMainFreq()
 cv::Rect &DataPoint::GetRoi()
 {
     return _roi;
+}
+
+void DataPoint::FreePlotThread()
+{
+    delete _plot_thread;
 }
 
 void DataPoint::UpdateROI()

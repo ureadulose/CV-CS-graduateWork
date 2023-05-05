@@ -2,7 +2,7 @@
 #include "opencv2/highgui.hpp"
 #include <iostream>
 
-PointTracker::PointTracker(std::vector<DataPoint>& pts_to_be_tracked) :
+PointTracker::PointTracker(std::vector<QPointer<DataPoint>>& pts_to_be_tracked) :
     _pts_to_be_tracked{ pts_to_be_tracked }
 {
 }
@@ -31,8 +31,8 @@ void PointTracker::Track(cv::Mat& frame1, cv::Mat& frame2, int method_num)
 
     for (auto &point : _pts_to_be_tracked)
     {
-        cv::Point2f displacement = _flow_frame.at<cv::Point2f>(point.GetLastPos().y, point.GetLastPos().x);
-        point.AddNewPosition(point.GetLastPos() + displacement);
+        cv::Point2f displacement = _flow_frame.at<cv::Point2f>(point->GetLastPos().y, point->GetLastPos().x);
+        point->AddNewPosition(point->GetLastPos() + displacement);
     }
 }
 

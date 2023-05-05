@@ -25,10 +25,13 @@ public:
     void CalculateDFourierTransforms();
     void DrawPtsAndData(cv::Mat& frame);
 
-    std::vector<DataPoint>& GetPoints();
+    std::vector<QPointer<DataPoint>>& GetPoints();
 
 //    TODO:
 //    std::vector<double>& GetDFTs();
+
+//signals:
+//    void DrawSpectrum();
 
 private:
     void AddPoint(cv::Point2f& point);
@@ -38,7 +41,7 @@ private:
     float _sample_rate;
 
     PointTracker* _PT_cap;
-    std::vector<DataPoint> _points;
+    std::vector<QPointer<DataPoint>> _points;
 };
 
 #endif // POINT_MANAGER_H

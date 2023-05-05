@@ -13,10 +13,10 @@ VideoTrackerPlayer::VideoTrackerPlayer(QMainWindow *image_window, QObject *paren
 {
     _PM_cap = new PointsManager();
 
-    QObject::connect(_image_window, SIGNAL(NewClick(EventType, cv::Point2f)),
-                     this, SLOT(HandleMouseEvent(EventType, cv::Point2f)));
-    QObject::connect(_image_window, SIGNAL(NewMousePos(EventType, cv::Point2f)),
-                     this, SLOT(HandleMouseEvent(EventType, cv::Point2f)));
+    QObject::connect(_image_window, SIGNAL(NewClick(EventType,cv::Point2f)),
+                     this, SLOT(HandleMouseEvent(EventType,cv::Point2f)));
+    QObject::connect(_image_window, SIGNAL(NewMousePos(EventType,cv::Point2f)),
+                     this, SLOT(HandleMouseEvent(EventType,cv::Point2f)));
 }
 
 VideoTrackerPlayer::~VideoTrackerPlayer()
@@ -52,7 +52,7 @@ void VideoTrackerPlayer::Play()
     {
         if (isStopped())
             _stop = false;
-        start(LowPriority);
+        start(QThread::LowPriority);
     }
 }
 
