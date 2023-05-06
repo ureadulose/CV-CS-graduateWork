@@ -9,14 +9,15 @@ DataPoint::DataPoint(cv::Point2f& point, float& sample_rate, QObject *parent) :
     _sample_rate{ sample_rate }
 {
     UpdateROI();
-    // Выделение памяти под новый поток PlotThread
-    _plot_thread = new PlotThread(_sample_rate);
-    QObject::connect(_plot_thread, SIGNAL(StopThread),
-                     this, SLOT(FreePlotThread));
 
     // probably temporary 2
     _magnitudes = std::vector<float>();
     _freqs = std::vector<float>();
+
+    // Выделение памяти под новый поток PlotThread
+    _plot_thread = new PlotThread(_freqs, _magnitudes, _sample_rate);
+    QObject::connect(_plot_thread, SIGNAL(StopThread()),
+                     this, SLOT(FreePlotThread()));
 }
 
 DataPoint::~DataPoint()
@@ -27,6 +28,7 @@ DataPoint::~DataPoint()
 void DataPoint::ShowSpectrum()
 {
     // Запуск нового потока PlotThread
+    _plot_thread->ShowDialog();
     _plot_thread->start();
 }
 

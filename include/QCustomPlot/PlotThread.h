@@ -10,9 +10,11 @@ class PlotThread : public QThread
     Q_OBJECT
 
 public:
-    PlotThread(int framerate, QObject *parent = nullptr);
+    PlotThread(std::vector<float> &x, std::vector<float> &y, int framerate, QObject *parent = nullptr);
 
+    void ShowDialog();
     void run() override;
+
 
 signals:
     void StopThread();
@@ -24,8 +26,12 @@ private:
     void msleep(int ms);
 
 private:
+    bool _stop;
+
+    std::vector<float> &_x;
+    std::vector<float> &_y;
     int _framerate;
-    AmSpectrDialog *_AS_dialog;
+    QPointer<AmSpectrDialog> _AS_dialog;
 };
 
 #endif
