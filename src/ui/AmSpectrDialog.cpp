@@ -3,13 +3,15 @@
 
 // for debug purposes
 #include <iostream>
+#include <QDebug>
 
-AmSpectrDialog::AmSpectrDialog(int framerate, QWidget *parent) :
+AmSpectrDialog::AmSpectrDialog(std::vector<float> &x, std::vector<float> &y, int framerate, QWidget *parent) :
     QDialog(parent),
-//    _x { x },
-//    _y { y },
-    _framerate{ framerate },
-    ui(new Ui::AmSpectrDialog)
+    ui(new Ui::AmSpectrDialog),
+    _stop { false },
+    _x { x },
+    _y { y },
+    _framerate{ framerate }
 {
     ui->setupUi(this);
     ui->plot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
@@ -27,22 +29,40 @@ AmSpectrDialog::AmSpectrDialog(int framerate, QWidget *parent) :
 
 AmSpectrDialog::~AmSpectrDialog()
 {
-    std::cout<<"amspectrdialog destructor"<<std::endl;
+    delete _dataPlotter;
+    delete _plotThread;
     delete ui;
 }
 
-void AmSpectrDialog::PlotData(std::vector<float> &_x, std::vector<float> &_y)
+void AmSpectrDialog::Startup()
 {
-    // Преобразуем векторы в QVector
-    QVector<double> x(qAsConst(_x).size());
-    std::copy(_x.begin(), _x.end(), x.begin());
-    QVector<double> y(qAsConst(_y).size());
-    std::copy(_y.begin(), _y.end(), y.begin());
-    ui->plot->graph()->setData(x, y);
-    ui->plot->replot();
+    _plotThread = new QThread();
+    // TODO: it's probably more clear to send actual delay and not framerate directly
+    _dataPlotter = new DataPlotter(this, _x, _y, _framerate);
+    _dataPlotter->moveToThread(_plotThread);
+    connect(_plotThread, SIGNAL(started()), _dataPlotter, SLOT(ExecutePlotting()));
+
+    _plotThread->start();
+
 }
 
 void AmSpectrDialog::closeEvent(QCloseEvent *ev)
 {
-    emit ToBeClosed();
+    _dataPlotter->StopPlotting();
+
+    _plotThread->quit();
+
+    if (_plotThread->isRunning())
+    {
+        _plotThread->wait();
+    }
+
+    emit finished();
+}
+
+void AmSpectrDialog::msleep(int ms)
+{
+    struct timespec ts = { ms / 1000, (ms % 1000) * 1000 * 1000 };
+    nanosleep(&ts, NULL);
+
 }

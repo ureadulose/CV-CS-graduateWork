@@ -4,8 +4,10 @@
 #include "opencv2/core/core.hpp"
 #include <opencv2/imgproc.hpp>
 
-#include "QCustomPlot/PlotThread.h"
-#include <QObject>
+#include "ui/AmSpectrDialog.h"
+
+//#include "QCustomPlot/PlotThread.h"
+//#include <QObject>
 
 // for debug purposes
 #include <iostream>
@@ -45,13 +47,16 @@ public:
     cv::Rect& GetRoi();
 
 private slots:
-    void FreePlotThread();
+    //void FreePlotThread();
+    void HideSpectrum();
 
 private:
     void UpdateROI();
 
 private:
-    PlotThread *_plot_thread;
+    AmSpectrDialog *_amSpectrDialog;
+    //PlotThread *_plot_thread;
+    DataPlotter *_plotThread;
 
     cv::Point2f _last_pos;
     std::vector<cv::Point2f> _positions;

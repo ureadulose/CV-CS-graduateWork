@@ -17,11 +17,6 @@ void PointsManager::UpdateSamplerate(float sample_rate)
     _sample_rate = sample_rate;
 }
 
-cv::Point2f PointsManager::TrackPoints(cv::Mat &frame1, cv::Mat &frame2, int method_num)
-{
-    _PT_cap->Track(frame1, frame2, 0);
-}
-
 void PointsManager::ManageNewCoords(EventType ev, cv::Point2f &coords)
 {
     bool result = false;
@@ -49,6 +44,13 @@ void PointsManager::ManageNewCoords(EventType ev, cv::Point2f &coords)
     }
 }
 
+void PointsManager::ManageFrames(cv::Mat &frame1, cv::Mat &frame2)
+{
+    TrackPoints(frame1, frame2, 0);
+    CalculateDFourierTransforms();
+    DrawPtsAndData(frame2);
+}
+
 bool PointsManager::Empty()
 {
     return _points.empty();
@@ -57,24 +59,6 @@ bool PointsManager::Empty()
 void PointsManager::ClearPoints()
 {
     _points.clear();
-}
-
-void PointsManager::CalculateDFourierTransforms()
-{
-    for (auto& point : _points)
-    {
-        // call DFT for each point
-        point->CalculateDFT();
-    }
-}
-
-void PointsManager::DrawPtsAndData(cv::Mat &frame)
-{
-    for (auto& point : _points)
-    {
-        point->DrawPoint(frame, true);
-        point->DrawData(frame);
-    }
 }
 
 std::vector<QPointer<DataPoint>> &PointsManager::GetPoints()
@@ -98,6 +82,29 @@ void PointsManager::RemovePoint(size_t idx)
     std::cout << "capacity: " << _points.capacity() << std::endl;
     std::cout << "max_size: " << _points.max_size() << std::endl;
     std::cout << "current size: " << _points.size() << std::endl;
+}
+
+cv::Point2f PointsManager::TrackPoints(cv::Mat &frame1, cv::Mat &frame2, int method_num)
+{
+    _PT_cap->Track(frame1, frame2, 0);
+}
+
+void PointsManager::CalculateDFourierTransforms()
+{
+    for (auto& point : _points)
+    {
+        // call DFT for each point
+        point->CalculateDFT();
+    }
+}
+
+void PointsManager::DrawPtsAndData(cv::Mat &frame)
+{
+    for (auto& point : _points)
+    {
+        point->DrawPoint(frame, true);
+        point->DrawData(frame);
+    }
 }
 
 // TODO:

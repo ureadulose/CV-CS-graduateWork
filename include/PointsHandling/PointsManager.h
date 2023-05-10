@@ -18,12 +18,11 @@ public:
 
     void UpdateSamplerate(float sample_rate);
 
-    cv::Point2f TrackPoints(cv::Mat& frame1, cv::Mat& frame2, int method_num);
+    // maybe ProcessNewCoords and ProcessFrames?
     void ManageNewCoords(EventType ev, cv::Point2f& coords);
+    void ManageFrames(cv::Mat& frame1, cv::Mat& frame2);
     bool Empty();
     void ClearPoints();
-    void CalculateDFourierTransforms();
-    void DrawPtsAndData(cv::Mat& frame);
 
     std::vector<QPointer<DataPoint>>& GetPoints();
 
@@ -36,6 +35,10 @@ public:
 private:
     void AddPoint(cv::Point2f& point);
     void RemovePoint(size_t idx);
+
+    cv::Point2f TrackPoints(cv::Mat& frame1, cv::Mat& frame2, int method_num);
+    void CalculateDFourierTransforms();
+    void DrawPtsAndData(cv::Mat& frame);
 
 private:
     float _sample_rate;
