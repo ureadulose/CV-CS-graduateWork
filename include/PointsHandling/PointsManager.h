@@ -5,7 +5,7 @@
 
 #include "include/PointsHandling/DataPoint.h"
 #include "include/PointsHandling/PointTracker.h"
-#include "EventType.h"
+#include "MyEnums.h"
 
 // for debug purposes
 #include <iostream>

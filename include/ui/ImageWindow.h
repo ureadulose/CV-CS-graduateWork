@@ -6,7 +6,7 @@
 #include <QMessageBox>
 
 #include "VideoHandling/VideoTrackerPlayer.h"
-#include "EventType.h"
+#include "MyEnums.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class ImageWindow; }

@@ -4,7 +4,7 @@
 // my headers
 #include "VideoHandling/CvFrameBufferHandler.h"
 #include "PointsHandling/PointsManager.h"
-#include "EventType.h"
+#include "MyEnums.h"
 
 #include <QImage>
 #include <QMainWindow>

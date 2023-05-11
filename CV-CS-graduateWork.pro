@@ -23,7 +23,7 @@ INCLUDEPATH += $$PWD \
     include
 
 HEADERS += \
-    include/EventType.h \
+    include/MyEnums.h \
     include/PointsHandling/DataPoint.h \
     include/PointsHandling/PointTracker.h \
     include/PointsHandling/PointsManager.h \
@@ -41,7 +41,7 @@ FORMS += \
     ui/imagewindow.ui \
     ui/processingwindow.ui
 
-win32: LIBS += -L$$PWD/../../ThirdParty/opencv/opencv470_g/x64/mingw/lib/ -llibopencv_core470.dll -llibopencv_highgui470.dll -llibopencv_imgcodecs470.dll -llibopencv_optflow470.dll -llibopencv_imgproc470.dll -llibopencv_videoio470.dll -llibopencv_tracking470.dll
+win32: LIBS += -L$$PWD/../../ThirdParty/opencv/opencv470_g/x64/mingw/lib/ -llibopencv_core470.dll -llibopencv_highgui470.dll -llibopencv_imgcodecs470.dll -llibopencv_optflow470.dll -llibopencv_imgproc470.dll -llibopencv_video470.dll -llibopencv_videoio470.dll -llibopencv_tracking470.dll
 
 INCLUDEPATH += $$PWD/../../ThirdParty/opencv/opencv470_g/include
 DEPENDPATH += $$PWD/../../ThirdParty/opencv/opencv470_g/include
@@ -51,6 +51,7 @@ PRE_TARGETDEPS += $$PWD/../../ThirdParty/opencv/opencv470_g/x64/mingw/lib/libope
 PRE_TARGETDEPS += $$PWD/../../ThirdParty/opencv/opencv470_g/x64/mingw/lib/libopencv_imgcodecs470.dll.a
 PRE_TARGETDEPS += $$PWD/../../ThirdParty/opencv/opencv470_g/x64/mingw/lib/libopencv_optflow470.dll.a
 PRE_TARGETDEPS += $$PWD/../../ThirdParty/opencv/opencv470_g/x64/mingw/lib/libopencv_imgproc470.dll.a
+PRE_TARGETDEPS += $$PWD/../../ThirdParty/opencv/opencv470_g/x64/mingw/lib/libopencv_video470.dll.a
 PRE_TARGETDEPS += $$PWD/../../ThirdParty/opencv/opencv470_g/x64/mingw/lib/libopencv_videoio470.dll.a
 PRE_TARGETDEPS += $$PWD/../../ThirdParty/opencv/opencv470_g/x64/mingw/lib/libopencv_tracking470.dll.a
 

@@ -38,6 +38,7 @@ public:
 
     bool HitTest(cv::Point2f& point);
 
+    std::vector<cv::Point2f>& GetPositions();
     cv::Point2f& GetLastPos();
     /*!
      * \brief Returns frequency with maximum amplitude from DFT

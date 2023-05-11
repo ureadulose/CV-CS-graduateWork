@@ -20,7 +20,6 @@ void PointsManager::UpdateSamplerate(float sample_rate)
 void PointsManager::ManageNewCoords(EventType ev, cv::Point2f &coords)
 {
     bool result = false;
-    //std::vector<int> hit_idxs;
 
     for (auto& point : _points)
     {
@@ -30,7 +29,6 @@ void PointsManager::ManageNewCoords(EventType ev, cv::Point2f &coords)
             if (ev == EventType::MouseClick)
             {
                 point->ShowSpectrum();
-                //emit DrawSpectrum();
             }
         }
     }
@@ -86,7 +84,7 @@ void PointsManager::RemovePoint(size_t idx)
 
 cv::Point2f PointsManager::TrackPoints(cv::Mat &frame1, cv::Mat &frame2, int method_num)
 {
-    _PT_cap->Track(frame1, frame2, 0);
+    _PT_cap->Track(frame1, frame2, OptflowType::SparseLucasKanade);
 }
 
 void PointsManager::CalculateDFourierTransforms()

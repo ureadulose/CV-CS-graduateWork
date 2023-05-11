@@ -25,6 +25,7 @@ public:
 
     void Startup();
 
+    // TODO: make it safe
     Ui::AmSpectrDialog *ui;
 
 signals:

@@ -142,6 +142,11 @@ bool DataPoint::HitTest(cv::Point2f &point)
     }
 }
 
+std::vector<cv::Point2f> &DataPoint::GetPositions()
+{
+    return _positions;
+}
+
 cv::Point2f& DataPoint::GetLastPos()
 {
     return _last_pos;

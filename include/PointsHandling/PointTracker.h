@@ -7,6 +7,7 @@
 #include <opencv2/highgui.hpp>
 
 #include "PointsHandling/DataPoint.h"
+#include "MyEnums.h"
 
 class PointTracker
 {
@@ -17,7 +18,7 @@ public:
 	/*! 
 	* @brief method_num: 0 - Farneback, 1 - HornSchunck
 	*/
-    void Track(cv::Mat& frame1, cv::Mat& frame2, int method_num);
+    void Track(cv::Mat& frame1, cv::Mat& frame2, OptflowType type);
     cv::Mat* GetOptflow();
 
 private:
