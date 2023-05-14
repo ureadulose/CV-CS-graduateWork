@@ -11,7 +11,9 @@ enum class OptflowType
 {
     DenseFarneback,
     SparceToDense,
-    SparseLucasKanade
+    SparseLucasKanade,
+    DeepFlow,
+    SimpleFlow
 };
 
 #endif

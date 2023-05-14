@@ -41,6 +41,21 @@ FORMS += \
     ui/imagewindow.ui \
     ui/processingwindow.ui
 
+#win32: LIBS += -L$$PWD/../../ThirdParty/opencv/opencv455_g/x64/mingw/lib/ -llibopencv_imgcodecs455.dll -llibopencv_imgproc455.dll -llibopencv_highgui455.dll -llibopencv_video455.dll -llibopencv_videoio455.dll -llibopencv_tracking455.dll -llibopencv_core455.dll -llibopencv_optflow455.dll
+
+#INCLUDEPATH += $$PWD/../../ThirdParty/opencv/opencv455_g/include
+#DEPENDPATH += $$PWD/../../ThirdParty/opencv/opencv455_g/include
+
+#PRE_TARGETDEPS += $$PWD/../../ThirdParty/opencv/opencv455_g/x64/mingw/lib/libopencv_imgcodecs455.dll.a
+#PRE_TARGETDEPS += $$PWD/../../ThirdParty/opencv/opencv455_g/x64/mingw/lib/libopencv_imgproc455.dll.a
+#PRE_TARGETDEPS += $$PWD/../../ThirdParty/opencv/opencv455_g/x64/mingw/lib/libopencv_highgui455.dll.a
+#PRE_TARGETDEPS += $$PWD/../../ThirdParty/opencv/opencv455_g/x64/mingw/lib/libopencv_optflow455.dll.a
+#PRE_TARGETDEPS += $$PWD/../../ThirdParty/opencv/opencv455_g/x64/mingw/lib/libopencv_video455.dll.a
+#PRE_TARGETDEPS += $$PWD/../../ThirdParty/opencv/opencv455_g/x64/mingw/lib/libopencv_videoio455.dll.a
+#PRE_TARGETDEPS += $$PWD/../../ThirdParty/opencv/opencv455_g/x64/mingw/lib/libopencv_tracking455.dll.a
+#PRE_TARGETDEPS += $$PWD/../../ThirdParty/opencv/opencv455_g/x64/mingw/lib/libopencv_core455.dll.a
+
+
 win32: LIBS += -L$$PWD/../../ThirdParty/opencv/opencv470_g/x64/mingw/lib/ -llibopencv_core470.dll -llibopencv_highgui470.dll -llibopencv_imgcodecs470.dll -llibopencv_optflow470.dll -llibopencv_imgproc470.dll -llibopencv_video470.dll -llibopencv_videoio470.dll -llibopencv_tracking470.dll
 
 INCLUDEPATH += $$PWD/../../ThirdParty/opencv/opencv470_g/include

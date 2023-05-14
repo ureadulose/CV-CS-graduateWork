@@ -22,20 +22,15 @@ void PointTracker::Track(cv::Mat& frame1, cv::Mat& frame2, OptflowType type)
 		cv::cvtColor(frame2, frame2_gray, cv::COLOR_BGR2GRAY);
 
     // blur frames a little bit to remove some noise
-    cv::GaussianBlur(frame1_gray, frame1_gray, cv::Size(5, 5), 0);
-    cv::GaussianBlur(frame2_gray, frame2_gray, cv::Size(5, 5), 0);
-    cv::GaussianBlur(frame1_gray, frame1_gray, cv::Size(5, 5), 0);
-    cv::GaussianBlur(frame2_gray, frame2_gray, cv::Size(5, 5), 0);
+    cv::GaussianBlur(frame1_gray, frame1_gray, cv::Size(3, 3), 0);
+    cv::GaussianBlur(frame2_gray, frame2_gray, cv::Size(3, 3), 0);
 
     switch(type)
     {
     case OptflowType::DenseFarneback:
     {
-
-        // TODO: currently this doesnt works :(
         cv::calcOpticalFlowFarneback(frame1_gray, frame2_gray, _flow_frame, 0.5, 3, 15, 3, 5, 1.2, 0);
-        bool test = false;
-        test = flow.empty();
+
         for (auto &point : _pts_to_be_tracked)
         {
             cv::Point2f displacement = _flow_frame.at<cv::Point2f>(point->GetLastPos().y, point->GetLastPos().x);
@@ -77,7 +72,31 @@ void PointTracker::Track(cv::Mat& frame1, cv::Mat& frame2, OptflowType type)
         for (size_t i = 0; i < _pts_to_be_tracked.size(); i++)
         {
             _pts_to_be_tracked[i]->AddNewPosition(nextPts[i]);
+            qDebug() << i << "-th point's displacement is " << nextPts[i].x - prevPts[i].x << "; " << nextPts[i].y - prevPts[i].y;
         }
+        break;
+    }
+    case OptflowType::DeepFlow:
+    {
+        cv::Ptr<cv::DenseOpticalFlow> deepFlow = cv::optflow::createOptFlow_DeepFlow();
+        deepFlow->calc(frame1_gray, frame2_gray, _flow_frame);
+        for (auto &point : _pts_to_be_tracked)
+        {
+            cv::Point2f displacement = _flow_frame.at<cv::Point2f>(point->GetLastPos().y, point->GetLastPos().x);
+            point->AddNewPosition(point->GetLastPos() + displacement);
+        }
+        break;
+    }
+    case OptflowType::SimpleFlow:
+    {
+        cv::Ptr<cv::DenseOpticalFlow> deepFlow = cv::optflow::createOptFlow_SimpleFlow();
+        deepFlow->calc(frame1_gray, frame2_gray, _flow_frame);
+        for (auto &point : _pts_to_be_tracked)
+        {
+            cv::Point2f displacement = _flow_frame.at<cv::Point2f>(point->GetLastPos().y, point->GetLastPos().x);
+            point->AddNewPosition(point->GetLastPos() + displacement);
+        }
+        break;
         break;
     }
     }

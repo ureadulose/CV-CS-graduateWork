@@ -5,6 +5,7 @@
 #include <opencv2/optflow.hpp>
 #include <opencv2/tracking.hpp>
 #include <opencv2/highgui.hpp>
+#include <opencv2/core/ocl.hpp>
 
 #include "PointsHandling/DataPoint.h"
 #include "MyEnums.h"
