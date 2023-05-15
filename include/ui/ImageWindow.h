@@ -41,7 +41,7 @@ private slots:
     // Slot for getting current mouse position on a VideoFrame
     void MouseCurrentPos();
 
-    void MousePressed();
+    void MousePressed(EventType event);
 
     void MouseLeftFrame();
 

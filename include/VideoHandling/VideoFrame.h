@@ -6,7 +6,7 @@
 #include <QDebug>
 #include <QEvent>
 
-
+#include "MyEnums.h"
 
 class VideoFrame : public QLabel
 {
@@ -27,7 +27,8 @@ private:
     QPointF _curr_mouse_pos;
 
 signals:
-    void MousePressedSignal();
+    void MouseLeftButtonPressedSignal(EventType event);
+    void MouseRightButtonPressedSignal(EventType event);
     void MousePosSignal();
     void MouseLeftFrameSignal();
 

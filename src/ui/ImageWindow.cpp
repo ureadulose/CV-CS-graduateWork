@@ -15,8 +15,10 @@ ImageWindow::ImageWindow(QWidget *parent)
 
     QObject::connect(ui->lblFrame, SIGNAL(MousePosSignal()),
                      this, SLOT(MouseCurrentPos()));
-    QObject::connect(ui->lblFrame, SIGNAL(MousePressedSignal()),
-                     this, SLOT(MousePressed()));
+    QObject::connect(ui->lblFrame, SIGNAL(MouseLeftButtonPressedSignal(EventType)),
+                     this, SLOT(MousePressed(EventType)));
+    QObject::connect(ui->lblFrame, SIGNAL(MouseRightButtonPressedSignal(EventType)),
+                     this, SLOT(MousePressed(EventType)));
     QObject::connect(ui->lblFrame, SIGNAL(MouseLeftFrameSignal()),
                      this, SLOT(MouseLeftFrame()));
 
@@ -97,7 +99,7 @@ void ImageWindow::MouseCurrentPos()
     }
 }
 
-void ImageWindow::MousePressed()
+void ImageWindow::MousePressed(EventType event)
 {
     // calculating difference between pixmap size and lblFrame size (in which pixmap is drawn)
     QSize lbl_pixmap_diff = ui->lblFrame->size() - ui->lblFrame->pixmap().size();
@@ -106,8 +108,21 @@ void ImageWindow::MousePressed()
     // translating to framesize-based coordinates
     cv::Point2f obj_coords = MapToImageCoords(ui->lblFrame->pixmap().size(), VTPlayer->GetFrameSize(), target);
 
-    //VTPlayer->HandleMouseEvent(EventType::MouseClick, obj_coords);
-    emit NewClick(EventType::MouseClick, obj_coords);
+    switch(event)
+    {
+    case EventType::MouseLeftPressed:
+    {
+        emit NewClick(EventType::MouseLeftPressed, obj_coords);
+        break;
+    }
+    case EventType::MouseRightPressed:
+    {
+        emit NewClick(EventType::MouseRightPressed, obj_coords);
+        std::cout<<"Right click"<<std::endl;
+        break;
+    }
+    }
+
 }
 
 void ImageWindow::MouseLeftFrame()

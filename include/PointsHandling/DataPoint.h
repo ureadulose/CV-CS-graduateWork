@@ -52,10 +52,9 @@ private:
 
 private:
     AmSpectrDialog *_amSpectrDialog;
-    //PlotThread *_plot_thread;
     DataPlotter *_plotThread;
 
-    cv::Point2f _last_pos;
+    cv::Point2f _lastPos;
     std::vector<cv::Point2f> _positions;
 
     int _radius;
@@ -63,9 +62,9 @@ private:
     cv::Rect _roi;
     bool _interacting;
 
-    float _sample_rate;
+    float _sampleRate;
     std::vector<cv::Point2f> _ft;
-    float _curr_frequency;
+    float _currFrequency;
 
     // probably temporary
     std::vector<float> _magnitudes;

@@ -20,21 +20,31 @@ void PointsManager::UpdateSamplerate(float sample_rate)
 void PointsManager::ManageNewCoords(EventType ev, cv::Point2f &coords)
 {
     bool result = false;
+    std::vector<size_t> idxsForRemoving;
 
-    for (auto& point : _points)
+    for (size_t i = 0; i < _points.size(); i++)
     {
-        if (point->HitTest(coords))
+        if (_points[i]->HitTest(coords))
         {
             result = true;
-            if (ev == EventType::MouseClick)
+            if (ev == EventType::MouseLeftPressed)
             {
                 // TODO: probably change it to slot-signal mechanism
-                point->ShowSpectrum();
+                _points[i]->ShowSpectrum();
+            }
+            if (ev == EventType::MouseRightPressed)
+            {
+                idxsForRemoving.push_back(i);
             }
         }
     }
 
-    if (ev != EventType::MouseClick)
+    for (auto &idx : idxsForRemoving)
+    {
+        RemovePoint(idx);
+    }
+
+    if (ev != EventType::MouseLeftPressed)
         return;
 
     if (!result)

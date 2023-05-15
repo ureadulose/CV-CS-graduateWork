@@ -2,11 +2,11 @@
 
 DataPoint::DataPoint(cv::Point2f& point, float& sample_rate, QObject *parent) :
     QObject(parent),
-    _last_pos{ point },
+    _lastPos{ point },
     _radius { 10 },
     _color { cv::Scalar(255, 255, 255) },
     _interacting { false },
-    _sample_rate{ sample_rate }
+    _sampleRate{ sample_rate }
 {
     UpdateROI();
 
@@ -20,7 +20,7 @@ DataPoint::~DataPoint()
 
 void DataPoint::ShowSpectrum()
 {
-    _amSpectrDialog = new AmSpectrDialog(_freqs, _magnitudes, _sample_rate);
+    _amSpectrDialog = new AmSpectrDialog(_freqs, _magnitudes, _sampleRate);
     QObject::connect(_amSpectrDialog, SIGNAL(finished()), this, SLOT(HideSpectrum()));
     _amSpectrDialog->Startup();
     _amSpectrDialog->show();
@@ -31,18 +31,18 @@ void DataPoint::DrawPoint(cv::Mat &frame, bool drawArrow)
     // draw mark of a point
     if (!drawArrow)
     {
-        cv::circle(frame, _last_pos, _radius, _color, -1);
+        cv::circle(frame, _lastPos, _radius, _color, -1);
     }
     else
     {
         int offset = _radius * 2;
         cv::Point triangle[3] = {
-            cv::Point(_last_pos.x, _last_pos.y),
-            cv::Point(_last_pos.x + offset / 2, _last_pos.y - offset),
-            cv::Point(_last_pos.x + offset, _last_pos.y - offset / 2)
+            cv::Point(_lastPos.x, _lastPos.y),
+            cv::Point(_lastPos.x + offset / 2, _lastPos.y - offset),
+            cv::Point(_lastPos.x + offset, _lastPos.y - offset / 2)
         };
         cv::fillConvexPoly(frame, triangle, 3, _color);
-        cv::circle(frame, cv::Point(_last_pos.x + offset, _last_pos.y - offset), _radius, _color, -1);
+        cv::circle(frame, cv::Point(_lastPos.x + offset, _lastPos.y - offset), _radius, _color, -1);
     }
 
     if (_interacting)
@@ -56,7 +56,7 @@ void DataPoint::DrawData(cv::Mat &frame)
     putText(
             frame,
             "hz: ",
-            cv::Point(_last_pos.x + 15, _last_pos.y),
+            cv::Point(_lastPos.x + 15, _lastPos.y),
             font,
             font_scale,
             cv::Scalar(0, 69, 255),
@@ -66,7 +66,7 @@ void DataPoint::DrawData(cv::Mat &frame)
 
 void DataPoint::AddNewPosition(cv::Point2f pos)
 {
-    _last_pos = pos;
+    _lastPos = pos;
     _positions.emplace_back(pos);
     UpdateROI();
 
@@ -105,7 +105,7 @@ void DataPoint::CalculateDFT()
     std::vector<float> freqs;
     for(size_t i = 0; i < samples_amount; i++)
     {
-        float tmp = _sample_rate * ((float)(i) / 2.f) / (float)(samples_amount);
+        float tmp = _sampleRate * ((float)(i) / 2.f) / (float)(samples_amount);
         freqs.push_back(tmp);
     }
 
@@ -148,12 +148,12 @@ std::vector<cv::Point2f> &DataPoint::GetPositions()
 
 cv::Point2f& DataPoint::GetLastPos()
 {
-    return _last_pos;
+    return _lastPos;
 }
 
 float &DataPoint::GetMainFreq()
 {
-    return _curr_frequency;
+    return _currFrequency;
 }
 
 cv::Rect &DataPoint::GetRoi()
@@ -169,7 +169,7 @@ void DataPoint::HideSpectrum()
 void DataPoint::UpdateROI()
 {
     _roi = cv::Rect(
-                cv::Point(_last_pos.x - INTERACTION_OFFSET, _last_pos.y - INTERACTION_OFFSET),
-                cv::Point(_last_pos.x + INTERACTION_OFFSET, _last_pos.y + INTERACTION_OFFSET)
+                cv::Point(_lastPos.x - INTERACTION_OFFSET, _lastPos.y - INTERACTION_OFFSET),
+                cv::Point(_lastPos.x + INTERACTION_OFFSET, _lastPos.y + INTERACTION_OFFSET)
                 );
 }

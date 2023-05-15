@@ -17,7 +17,10 @@ void VideoFrame::mouseMoveEvent(QMouseEvent *ev)
 
 void VideoFrame::mousePressEvent(QMouseEvent *ev)
 {
-    emit MousePressedSignal();
+    if (ev->button() == Qt::LeftButton)
+        emit MouseLeftButtonPressedSignal(EventType::MouseLeftPressed);
+    else if (ev->button() == Qt::RightButton)
+        emit MouseRightButtonPressedSignal(EventType::MouseRightPressed);
 }
 
 void VideoFrame::leaveEvent(QEvent *)

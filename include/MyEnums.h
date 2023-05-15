@@ -3,7 +3,8 @@
 
 enum class EventType
 {
-    MouseClick,
+    MouseLeftPressed,
+    MouseRightPressed,
     MouseMove
 };
 
