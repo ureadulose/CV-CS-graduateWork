@@ -2,19 +2,16 @@
 
 #include "ui/ImageWindow.h"
 
-// for CV waiter implementation
-//constexpr double INTERVAL_IN_MS = 25;
-
 VideoTrackerPlayer::VideoTrackerPlayer(QMainWindow *image_window, QObject *parent) :
-    QObject(parent),
+    QThread(parent),
     _image_window{ image_window },
     _stop{ true },
     _FBH_cap_created{ false }
 {
     _PM_cap = new PointsManager();
 
-//    QObject::connect(_image_window, SIGNAL(NewClick(EventType,cv::Point2f)),
-//                     this, SLOT(HandleMouseEvent(EventType,cv::Point2f)));
+    QObject::connect(_image_window, SIGNAL(NewClick(EventType,cv::Point2f)),
+                     this, SLOT(HandleMouseEvent(EventType,cv::Point2f)));
     QObject::connect(_image_window, SIGNAL(NewMousePos(EventType,cv::Point2f)),
                      this, SLOT(HandleMouseEvent(EventType,cv::Point2f)));
 }
@@ -48,8 +45,12 @@ bool VideoTrackerPlayer::LoadVideo(std::string filename)
 void VideoTrackerPlayer::Play()
 {
     // isRunning - member of QThread
-    if (isStopped())
-        _stop = false;
+    if (!isRunning())
+        {
+            if (isStopped())
+                _stop = false;
+            start(QThread::LowPriority);
+        }
 }
 
 void VideoTrackerPlayer::Stop()
@@ -70,7 +71,6 @@ cv::Size VideoTrackerPlayer::GetFrameSize()
 
 void VideoTrackerPlayer::HandleMouseEvent(EventType ev, cv::Point2f obj_coords)
 {
-    std::cout << "Managing coordinates" << std::endl;
     this->_PM_cap->ManageNewCoords(ev, obj_coords);
 }
 
@@ -79,12 +79,13 @@ void VideoTrackerPlayer::run()
     int delay = (1000/_framerate);
     while (!_stop)
     {
+        cv::Mat frame;
         if (!_FBH_cap->ReadFrame())
         {
             _stop = true;
             break;
         }
-        _cvFrame = _FBH_cap->GetCurrRgbFrame();
+        _FBH_cap->GetCurrRgbFrame()->copyTo(_cvFrame);
 
         if (!_PM_cap->Empty())
             {
@@ -92,8 +93,7 @@ void VideoTrackerPlayer::run()
                 auto start_time = std::chrono::high_resolution_clock::now();
                 // DEBUG END
 
-                // Put this to PM, not here
-                _PM_cap->ManageFrames(*_FBH_cap->GetPrevRgbFrame(), *_FBH_cap->GetCurrRgbFrame());
+                _PM_cap->ManageFrames(*_FBH_cap->GetPrevRgbFrame(), *_FBH_cap->GetCurrRgbFrame(), _cvFrame);
 
                 // DEBUG
                 auto end_time = std::chrono::high_resolution_clock::now();
@@ -103,9 +103,9 @@ void VideoTrackerPlayer::run()
                 // DEBUG END
             }
 
-        cv::cvtColor(*_cvFrame, *_cvFrame, cv::COLOR_BGR2RGB);
-        _qImg = QImage((const unsigned char*)(_cvFrame->data),
-                      _cvFrame->cols, _cvFrame->rows, QImage::Format_RGB888);
+        cv::cvtColor(_cvFrame, _cvFrame, cv::COLOR_BGR2RGB);
+        _qImg = QImage((const unsigned char*)(_cvFrame.data),
+                      _cvFrame.cols, _cvFrame.rows, QImage::Format_RGB888);
 
         emit ToBeDisplayed(_qImg);
         this->msleep(delay);

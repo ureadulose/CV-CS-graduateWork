@@ -6,9 +6,6 @@
 
 #include "ui/AmSpectrDialog.h"
 
-//#include "QCustomPlot/PlotThread.h"
-//#include <QObject>
-
 // for debug purposes
 #include <iostream>
 
@@ -48,7 +45,6 @@ public:
     cv::Rect& GetRoi();
 
 private slots:
-    //void FreePlotThread();
     void HideSpectrum();
 
 private:

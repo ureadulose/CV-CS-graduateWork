@@ -15,7 +15,7 @@
 /*!
 * @brief Class is meant to be a shell for the whole app
 */
-class VideoTrackerPlayer : public QObject
+class VideoTrackerPlayer : public QThread
 {
     Q_OBJECT
 
@@ -31,7 +31,7 @@ public:
     cv::Size GetFrameSize();
 
 public slots:
-    void run();
+    void HandleMouseEvent(EventType ev, cv::Point2f obj_coords);
 
 signals:
     // Signal for outputting the frame to be displayed
@@ -39,10 +39,8 @@ signals:
     void pleaseStop();
 
 protected:
+    void run();
     void msleep(int ms);
-
-public:
-    void HandleMouseEvent(EventType ev, cv::Point2f obj_coords);
 
 private:
     CvFrameBufferHandler* _FBH_cap;
@@ -56,7 +54,7 @@ private:
 
     bool _FBH_cap_created;
     int _framerate;
-    cv::Mat *_cvFrame;
+    cv::Mat _cvFrame;
     QImage _qImg;
 };
 

@@ -72,7 +72,6 @@ void PointTracker::Track(cv::Mat& frame1, cv::Mat& frame2, OptflowType type)
         for (size_t i = 0; i < _pts_to_be_tracked.size(); i++)
         {
             _pts_to_be_tracked[i]->AddNewPosition(nextPts[i]);
-            qDebug() << i << "-th point's displacement is " << nextPts[i].x - prevPts[i].x << "; " << nextPts[i].y - prevPts[i].y;
         }
         break;
     }
@@ -96,7 +95,6 @@ void PointTracker::Track(cv::Mat& frame1, cv::Mat& frame2, OptflowType type)
             cv::Point2f displacement = _flow_frame.at<cv::Point2f>(point->GetLastPos().y, point->GetLastPos().x);
             point->AddNewPosition(point->GetLastPos() + displacement);
         }
-        break;
         break;
     }
     }

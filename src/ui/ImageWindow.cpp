@@ -71,16 +71,7 @@ void ImageWindow::on_pushButton_2_clicked()
 {
     if (VTPlayer->isStopped())
     {
-        playerThread = new QThread();
-        VTPlayer->moveToThread(playerThread);
         VTPlayer->Play();
-
-        connect(playerThread, SIGNAL(started()), VTPlayer, SLOT(run()));
-        connect(VTPlayer, SIGNAL(pleaseStop()), playerThread, SLOT(quit()));
-        connect(playerThread, SIGNAL(finished()), playerThread, SLOT(deleteLater()));
-
-        playerThread->start();
-
         ui->pushButton_2->setText(tr("Stop"));
     }
     else
@@ -115,8 +106,8 @@ void ImageWindow::MousePressed()
     // translating to framesize-based coordinates
     cv::Point2f obj_coords = MapToImageCoords(ui->lblFrame->pixmap().size(), VTPlayer->GetFrameSize(), target);
 
-    VTPlayer->HandleMouseEvent(EventType::MouseClick, obj_coords);
-    //emit NewClick;
+    //VTPlayer->HandleMouseEvent(EventType::MouseClick, obj_coords);
+    emit NewClick(EventType::MouseClick, obj_coords);
 }
 
 void ImageWindow::MouseLeftFrame()

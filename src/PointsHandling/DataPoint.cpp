@@ -16,7 +16,6 @@ DataPoint::DataPoint(cv::Point2f& point, float& sample_rate, QObject *parent) :
 
 DataPoint::~DataPoint()
 {
-
 }
 
 void DataPoint::ShowSpectrum()

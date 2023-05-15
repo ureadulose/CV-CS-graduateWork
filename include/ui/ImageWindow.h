@@ -48,6 +48,5 @@ private slots:
 private:
     Ui::ImageWindow *ui;
     VideoTrackerPlayer *VTPlayer;
-    QThread *playerThread;
 };
 #endif // IMAGEWINDOW_H

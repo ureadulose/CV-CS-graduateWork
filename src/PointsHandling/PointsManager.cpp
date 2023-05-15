@@ -28,6 +28,7 @@ void PointsManager::ManageNewCoords(EventType ev, cv::Point2f &coords)
             result = true;
             if (ev == EventType::MouseClick)
             {
+                // TODO: probably change it to slot-signal mechanism
                 point->ShowSpectrum();
             }
         }
@@ -42,11 +43,11 @@ void PointsManager::ManageNewCoords(EventType ev, cv::Point2f &coords)
     }
 }
 
-void PointsManager::ManageFrames(cv::Mat &frame1, cv::Mat &frame2)
+void PointsManager::ManageFrames(cv::Mat frame1, cv::Mat frame2, cv::Mat &frameForDraw)
 {
     TrackPoints(frame1, frame2, 0);
     CalculateDFourierTransforms();
-    DrawPtsAndData(frame2);
+    DrawPtsAndData(frameForDraw);
 }
 
 bool PointsManager::Empty()
@@ -104,8 +105,3 @@ void PointsManager::DrawPtsAndData(cv::Mat &frame)
         point->DrawData(frame);
     }
 }
-
-// TODO:
-//std::vector<double> &PointsManager::GetDFTs()
-//{
-//}

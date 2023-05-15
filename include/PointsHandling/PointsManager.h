@@ -18,19 +18,12 @@ public:
 
     void UpdateSamplerate(float sample_rate);
 
-    // maybe ProcessNewCoords and ProcessFrames?
     void ManageNewCoords(EventType ev, cv::Point2f& coords);
-    void ManageFrames(cv::Mat& frame1, cv::Mat& frame2);
+    void ManageFrames(cv::Mat frame1, cv::Mat frame2, cv::Mat &frameForDraw);
     bool Empty();
     void ClearPoints();
 
     std::vector<QPointer<DataPoint>>& GetPoints();
-
-//    TODO:
-//    std::vector<double>& GetDFTs();
-
-//signals:
-//    void DrawSpectrum();
 
 private:
     void AddPoint(cv::Point2f& point);
