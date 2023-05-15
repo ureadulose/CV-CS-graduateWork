@@ -5,7 +5,7 @@
 #include <QFileDialog>
 #include <QMessageBox>
 
-#include "VideoHandling/VideoTrackerPlayer.h"
+#include "VideoProcessing/ProcessingPlayer.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class ProcessingWindow; }
@@ -20,27 +20,20 @@ public:
     ~ProcessingWindow();
 
 private:
-//    cv::Point2f MapToImageCoords(QSize map_size, cv::Size image_size, QPointF src_coords);
+    cv::Point2f MapToImageCoords(QSize map_size, cv::Size image_size, QPointF src_coords);
 
 private slots:
-//    // Display video frame in player UI
-//    void updatePlayerUI(QImage img);
+    // Display video frame in player UI
+    void updatePlayerUI(QImage img);
 
-//    // Slot for the load video push button
-//    void on_pushButton_clicked();
+    // Slot for the load video push button
+    void on_pushButton_clicked();
 
-//    // Slot for the play push button
-//    void on_pushButton_2_clicked();
-
-//    // Slot for getting current mouse position on a VideoFrame
-//    void MouseCurrentPos();
-
-//    void MousePressed();
-
-//    void MouseLeftFrame();
+    // Slot for the play push button
+    void on_pushButton_2_clicked();
 
 private:
     Ui::ProcessingWindow *ui;
-//    VideoTrackerPlayer *VTPlayer;
+    ProcessingPlayer *ProcessPlayer;
 };
 #endif // IMAGEWINDOW_H

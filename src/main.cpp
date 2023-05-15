@@ -1,9 +1,11 @@
-#include "ui/ImageWindow.h"
+#include "ui/ProcessingWindow.h"
+//#include "ui/ImageWindow.h"
 #include <opencv2/core.hpp>
 #include <opencv2/opencv.hpp>
 #include <opencv2/core/ocl.hpp>
 #include <QApplication>
 #include <iostream>
+#include <QFile>
 
 int main(int argc, char *argv[])
 {
@@ -17,11 +19,12 @@ int main(int argc, char *argv[])
     } else {
         std::cout << "OpenCL is not supported" << std::endl;
     }
-    QApplication a(argc, argv);
-    ImageWindow *w = new ImageWindow();
-    //ProcessingWindow *w = new ProcessingWindow();
+    QApplication app(argc, argv);
+
+//    ImageWindow *w = new ImageWindow();
+    ProcessingWindow *w = new ProcessingWindow();
     w->setAttribute(Qt::WA_DeleteOnClose, true);
 
     w->show();
-    return a.exec();
+    return app.exec();
 }

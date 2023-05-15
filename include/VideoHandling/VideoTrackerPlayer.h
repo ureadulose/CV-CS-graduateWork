@@ -39,23 +39,22 @@ signals:
     void pleaseStop();
 
 protected:
-    void run();
+    virtual void run();
     void msleep(int ms);
 
+protected:
+    CvFrameBufferHandler* _FBH_cap; // protected:
+    int _framerate; //protected:
+    bool _stop; // protected:
+    cv::Mat _cvFrame; // protected:
+    QImage _qImg; // protected:
+
 private:
-    CvFrameBufferHandler* _FBH_cap;
     PointsManager* _PM_cap;
-
     QMainWindow* _image_window;
-
-    bool _stop;
     QMutex _mutex;
     QWaitCondition _cond;
-
     bool _FBH_cap_created;
-    int _framerate;
-    cv::Mat _cvFrame;
-    QImage _qImg;
 };
 
 #endif // VIDEO_TRACKER_PLAYER_H

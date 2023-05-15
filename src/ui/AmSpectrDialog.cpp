@@ -19,7 +19,7 @@ AmSpectrDialog::AmSpectrDialog(std::vector<float> &x, std::vector<float> &y, int
     ui->plot->yAxis->setLabel("");
     ui->plot->xAxis->setLabel("Frequency");
     ui->plot->xAxis->setRange(0.0, (double)(framerate) / 2.0);
-    ui->plot->yAxis->setRange(0.0, 1.0);
+    ui->plot->yAxis->setRange(0.0, 0.01);
     ui->plot->replot();
     ui->plot->clearGraphs();
     ui->plot->addGraph();

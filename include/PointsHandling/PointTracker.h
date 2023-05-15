@@ -13,7 +13,7 @@
 class PointTracker
 {
 public:
-    PointTracker(std::vector<QPointer<DataPoint>>& pts_to_be_tracked);
+    PointTracker(std::vector<QPointer<DataPoint>>* pts_to_be_tracked = nullptr);
 	~PointTracker();
 
 	/*! 
@@ -23,7 +23,9 @@ public:
     cv::Mat* GetOptflow();
 
 private:
-    std::vector<QPointer<DataPoint>>& _pts_to_be_tracked;
+
+private:
+    std::vector<QPointer<DataPoint>>* _pts_to_be_tracked;
     cv::Mat _flow_frame;
 
 };

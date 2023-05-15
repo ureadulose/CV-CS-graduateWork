@@ -4,7 +4,7 @@
 PointsManager::PointsManager()
 {
     // passing a link for a DataPoint vector which is handled in PointsManager and will be tracked in PointTracker
-    _PT_cap = new PointTracker(_points);
+    _PT_cap = new PointTracker(&_points);
 }
 
 PointsManager::~PointsManager()

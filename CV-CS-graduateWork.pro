@@ -14,6 +14,8 @@ SOURCES +=  \
     src/VideoHandling/CvFrameBufferHandler.cpp \
     src/VideoHandling/VideoFrame.cpp \
     src/VideoHandling/VideoTrackerPlayer.cpp \
+    src/VideoProcessing/ProcessingManager.cpp \
+    src/VideoProcessing/ProcessingPlayer.cpp \
     src/main.cpp \
     src/ui/AmSpectrDialog.cpp \
     src/ui/ImageWindow.cpp \
@@ -32,6 +34,8 @@ HEADERS += \
     include/VideoHandling/CvFrameBufferHandler.h \
     include/VideoHandling/VideoFrame.h \
     include/VideoHandling/VideoTrackerPlayer.h \
+    include/VideoProcessing/ProcessingManager.h \
+    include/VideoProcessing/ProcessingPlayer.h \
     include/ui/AmSpectrDialog.h \
     include/ui/ImageWindow.h \
     include/ui/ProcessingWindow.h
