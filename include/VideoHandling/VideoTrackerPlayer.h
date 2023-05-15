@@ -15,7 +15,7 @@
 /*!
 * @brief Class is meant to be a shell for the whole app
 */
-class VideoTrackerPlayer : public QThread
+class VideoTrackerPlayer : public QObject
 {
     Q_OBJECT
 
@@ -30,15 +30,18 @@ public:
     // Video Parameters
     cv::Size GetFrameSize();
 
+public slots:
+    void run();
+
 signals:
     // Signal for outputting the frame to be displayed
     void ToBeDisplayed(const QImage &image);
+    void pleaseStop();
 
 protected:
-    void run();
     void msleep(int ms);
 
-private slots:
+public:
     void HandleMouseEvent(EventType ev, cv::Point2f obj_coords);
 
 private:

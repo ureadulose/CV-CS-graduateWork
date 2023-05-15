@@ -6,15 +6,15 @@
 //constexpr double INTERVAL_IN_MS = 25;
 
 VideoTrackerPlayer::VideoTrackerPlayer(QMainWindow *image_window, QObject *parent) :
-    QThread(parent),
+    QObject(parent),
     _image_window{ image_window },
     _stop{ true },
     _FBH_cap_created{ false }
 {
     _PM_cap = new PointsManager();
 
-    QObject::connect(_image_window, SIGNAL(NewClick(EventType,cv::Point2f)),
-                     this, SLOT(HandleMouseEvent(EventType,cv::Point2f)));
+//    QObject::connect(_image_window, SIGNAL(NewClick(EventType,cv::Point2f)),
+//                     this, SLOT(HandleMouseEvent(EventType,cv::Point2f)));
     QObject::connect(_image_window, SIGNAL(NewMousePos(EventType,cv::Point2f)),
                      this, SLOT(HandleMouseEvent(EventType,cv::Point2f)));
 }
@@ -48,17 +48,14 @@ bool VideoTrackerPlayer::LoadVideo(std::string filename)
 void VideoTrackerPlayer::Play()
 {
     // isRunning - member of QThread
-    if (!isRunning())
-    {
-        if (isStopped())
-            _stop = false;
-        start(QThread::LowPriority);
-    }
+    if (isStopped())
+        _stop = false;
 }
 
 void VideoTrackerPlayer::Stop()
 {
     _stop = true;
+    emit pleaseStop();
 }
 
 bool VideoTrackerPlayer::isStopped() const
@@ -73,6 +70,7 @@ cv::Size VideoTrackerPlayer::GetFrameSize()
 
 void VideoTrackerPlayer::HandleMouseEvent(EventType ev, cv::Point2f obj_coords)
 {
+    std::cout << "Managing coordinates" << std::endl;
     this->_PM_cap->ManageNewCoords(ev, obj_coords);
 }
 
