@@ -24,6 +24,7 @@ CvFrameBufferHandler::~CvFrameBufferHandler()
 
     if (_writerCap->isOpened())
     {
+        std::cout << "Releasing writer cap" << std::endl;
         _writerCap->release();
         delete _writerCap;
     }
@@ -78,6 +79,11 @@ int CvFrameBufferHandler::GetFramerate()
 cv::Size CvFrameBufferHandler::GetFrameSize()
 {
     return cv::Size(_videoCap->get(cv::CAP_PROP_FRAME_WIDTH), _videoCap->get(cv::CAP_PROP_FRAME_HEIGHT));
+}
+
+int CvFrameBufferHandler::GetChannelsAmount()
+{
+    return _curr_rgb_frame.channels();
 }
 
 void CvFrameBufferHandler::initializeVideoWriter(const std::string &filename)

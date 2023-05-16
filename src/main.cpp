@@ -1,5 +1,5 @@
-#include "ui/ProcessingWindow.h"
-//#include "ui/ImageWindow.h"
+//#include "ui/ProcessingWindow.h"
+#include "ui/ImageWindow.h"
 #include <opencv2/core.hpp>
 #include <opencv2/opencv.hpp>
 #include <opencv2/core/ocl.hpp>
@@ -21,8 +21,8 @@ int main(int argc, char *argv[])
     }
     QApplication app(argc, argv);
 
-//    ImageWindow *w = new ImageWindow();
-    ProcessingWindow *w = new ProcessingWindow();
+    ImageWindow *w = new ImageWindow();
+//    ProcessingWindow *w = new ProcessingWindow();
     w->setAttribute(Qt::WA_DeleteOnClose, true);
 
     w->show();

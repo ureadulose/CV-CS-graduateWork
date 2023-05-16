@@ -76,6 +76,18 @@ void PointTracker::Track(cv::Mat& frame1, cv::Mat& frame2, OptflowType type)
 
         break;
     }
+    case OptflowType::Calculated:
+    {
+        // TODO: recreate it in a more clear way. now it's just hard coding
+        std::vector<cv::Mat> frame2Channels;
+        cv::split(frame2, frame2Channels);
+        std::vector<cv::Mat> optflowChannels(2);
+        optflowChannels[0] = frame2Channels[1];
+        optflowChannels[1] = frame2Channels[2];
+        cv::merge(optflowChannels, _flow_frame);
+
+        break;
+    }
     }
 
     // after calculating flow put displacement to our points

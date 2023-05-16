@@ -29,6 +29,7 @@ public:
 	cv::Mat* GetPrevRgbFrame();
     int GetFramerate();
     cv::Size GetFrameSize();
+    int GetChannelsAmount();
 
 private:
     void initializeVideoWriter(const std::string& filename);

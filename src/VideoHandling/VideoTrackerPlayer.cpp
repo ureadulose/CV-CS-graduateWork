@@ -4,8 +4,10 @@
 
 VideoTrackerPlayer::VideoTrackerPlayer(QMainWindow *image_window, QObject *parent) :
     QThread(parent),
-    _image_window{ image_window },
     _stop{ true },
+    precalcVideo_{ false },
+    optflowType_{ OptflowType::SparseLucasKanade },
+    _image_window{ image_window },
     _FBH_cap_created{ false }
 {
     _PM_cap = new PointsManager();
@@ -33,11 +35,25 @@ VideoTrackerPlayer::~VideoTrackerPlayer()
 
 bool VideoTrackerPlayer::LoadVideo(std::string filename)
 {
+    // reset the Frame Buffer Handler
+    if (_FBH_cap_created)
+    {
+        delete _FBH_cap;
+        _FBH_cap_created = false;
+    }
+
     _FBH_cap = new CvFrameBufferHandler(filename);
     if (!_FBH_cap->Exists())
         return false;
     _framerate = _FBH_cap->GetFramerate();
     _PM_cap->UpdateSamplerate(_framerate);
+
+    if (_FBH_cap->GetChannelsAmount() == 4)
+    {
+        precalcVideo_ = true;
+        optflowType_ = OptflowType::Calculated;
+    }
+
     _FBH_cap_created = true;
     return true;
 }
@@ -93,7 +109,7 @@ void VideoTrackerPlayer::run()
                 auto start_time = std::chrono::high_resolution_clock::now();
                 // DEBUG END
 
-                _PM_cap->ManageFrames(*_FBH_cap->GetPrevRgbFrame(), *_FBH_cap->GetCurrRgbFrame(), _cvFrame);
+                _PM_cap->ManageFrames(*_FBH_cap->GetPrevRgbFrame(), *_FBH_cap->GetCurrRgbFrame(), _cvFrame, optflowType_);
 
                 // DEBUG
                 auto end_time = std::chrono::high_resolution_clock::now();

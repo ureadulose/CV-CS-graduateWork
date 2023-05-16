@@ -31,6 +31,7 @@ void ProcessingPlayer::run()
         // DEBUG END
 
         ProcessManager_->ManageFrames(*_FBH_cap->GetPrevRgbFrame(), *_FBH_cap->GetCurrRgbFrame(), frame);
+        ProcessManager_->CombineFrames(*_FBH_cap->GetPrevRgbFrame(), *_FBH_cap->GetCurrRgbFrame(), frame);
         _FBH_cap->WriteFrame(frame);
 
         // DEBUG

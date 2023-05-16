@@ -32,6 +32,8 @@ private slots:
     // Slot for the play push button
     void on_pushButton_2_clicked();
 
+    void closeEvent(QCloseEvent *ev);
+
 private:
     Ui::ProcessingWindow *ui;
     ProcessingPlayer *ProcessPlayer;

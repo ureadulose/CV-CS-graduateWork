@@ -51,6 +51,8 @@ protected:
 
 private:
     PointsManager* _PM_cap;
+    bool precalcVideo_;
+    OptflowType optflowType_;
     QMainWindow* _image_window;
     QMutex _mutex;
     QWaitCondition _cond;

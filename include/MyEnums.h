@@ -14,7 +14,8 @@ enum class OptflowType
     SparceToDense,
     SparseLucasKanade,
     DeepFlow,
-    SimpleFlow
+    SimpleFlow,
+    Calculated
 };
 
 #endif

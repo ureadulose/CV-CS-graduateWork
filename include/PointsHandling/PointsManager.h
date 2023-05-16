@@ -19,7 +19,7 @@ public:
     void UpdateSamplerate(float sample_rate);
 
     void ManageNewCoords(EventType ev, cv::Point2f& coords);
-    void ManageFrames(cv::Mat frame1, cv::Mat frame2, cv::Mat &frameForDraw);
+    void ManageFrames(cv::Mat frame1, cv::Mat frame2, cv::Mat &frameForDraw, OptflowType optflowType);
     bool Empty();
     void ClearPoints();
 
@@ -29,8 +29,9 @@ private:
     void AddPoint(cv::Point2f& point);
     void RemovePoint(size_t idx);
 
-    cv::Point2f TrackPoints(cv::Mat& frame1, cv::Mat& frame2, int method_num);
+    cv::Point2f TrackPoints(cv::Mat &frame1, cv::Mat &frame2, OptflowType optflowType);
     void CalculateDFourierTransforms();
+    void PrepareFrame(cv::Mat& frame, OptflowType optflowType);
     void DrawPtsAndData(cv::Mat& frame);
 
 private:

@@ -49,6 +49,12 @@ void ProcessingWindow::on_pushButton_clicked()
                                                     tr("Video Files (*.avi, *.mpg, *.mp4)"));
     if (!filename.isEmpty())
     {
+        if (!ProcessPlayer->isStopped())
+        {
+            ProcessPlayer->Stop();
+            // TODO: probably make it more clear: when Stop() method is called it emits the signal and then text on a button changes
+            ui->pushButton_2->setText(tr("Process Video"));
+        }
         if (!ProcessPlayer->LoadVideo(filename.toStdString().data()))
         {
             QMessageBox msgBox;
@@ -68,6 +74,19 @@ void ProcessingWindow::on_pushButton_2_clicked()
     else
     {
         ProcessPlayer->Stop();
-        ui->pushButton_2->setText(tr("Play"));
+        ui->pushButton_2->setText(tr("Process Video"));
     }
+}
+
+void ProcessingWindow::closeEvent(QCloseEvent *ev)
+{
+    ProcessPlayer->Stop();
+
+    ProcessPlayer->quit();
+
+    if (ProcessPlayer->isRunning())
+    {
+        ProcessPlayer->wait();
+    }
+    QMainWindow::closeEvent(ev);
 }

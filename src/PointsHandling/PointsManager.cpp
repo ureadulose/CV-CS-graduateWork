@@ -53,10 +53,12 @@ void PointsManager::ManageNewCoords(EventType ev, cv::Point2f &coords)
     }
 }
 
-void PointsManager::ManageFrames(cv::Mat frame1, cv::Mat frame2, cv::Mat &frameForDraw)
+void PointsManager::ManageFrames(cv::Mat frame1, cv::Mat frame2, cv::Mat &frameForDraw, OptflowType optflowType)
 {
-    TrackPoints(frame1, frame2, 0);
+    TrackPoints(frame1, frame2, optflowType);
     CalculateDFourierTransforms();
+    // TODO: probably i could add a FrameManager class which will to this work
+    PrepareFrame(frameForDraw, optflowType);
     DrawPtsAndData(frameForDraw);
 }
 
@@ -93,9 +95,9 @@ void PointsManager::RemovePoint(size_t idx)
     std::cout << "current size: " << _points.size() << std::endl;
 }
 
-cv::Point2f PointsManager::TrackPoints(cv::Mat &frame1, cv::Mat &frame2, int method_num)
+cv::Point2f PointsManager::TrackPoints(cv::Mat &frame1, cv::Mat &frame2, OptflowType optflowType)
 {
-    _PT_cap->Track(frame1, frame2, OptflowType::SparseLucasKanade);
+    _PT_cap->Track(frame1, frame2, optflowType);
 }
 
 void PointsManager::CalculateDFourierTransforms()
@@ -104,6 +106,18 @@ void PointsManager::CalculateDFourierTransforms()
     {
         // call DFT for each point
         point->CalculateDFT();
+    }
+}
+
+void PointsManager::PrepareFrame(cv::Mat &frame, OptflowType optflowType)
+{
+    // TODO: make it less hard-coded
+    if (optflowType == OptflowType::Calculated)
+    {
+        std::vector<cv::Mat> frameChannels;
+        cv::split(frame, frameChannels);
+        std::vector<cv::Mat> outputChannels(1);
+        cv::merge(outputChannels, frame);
     }
 }
 
