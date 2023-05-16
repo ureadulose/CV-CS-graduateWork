@@ -58,8 +58,11 @@ void PointsManager::ManageFrames(cv::Mat frame1, cv::Mat frame2, cv::Mat &frameF
     TrackPoints(frame1, frame2, optflowType);
     CalculateDFourierTransforms();
     // TODO: probably i could add a FrameManager class which will to this work
+    std::cout << "Preparing useless frame" << std::endl;
     PrepareFrame(frameForDraw, optflowType);
+    std::cout << "Started drawing on a frame" << std::endl;
     DrawPtsAndData(frameForDraw);
+    std::cout << "Stopped drawing on a frame" << std::endl;
 }
 
 bool PointsManager::Empty()
@@ -72,7 +75,7 @@ void PointsManager::ClearPoints()
     _points.clear();
 }
 
-std::vector<QPointer<DataPoint>> &PointsManager::GetPoints()
+std::vector<DataPoint*> &PointsManager::GetPoints()
 {
     return _points;
 }
@@ -80,14 +83,15 @@ std::vector<QPointer<DataPoint>> &PointsManager::GetPoints()
 void PointsManager::AddPoint(cv::Point2f &point)
 {
     // TODO: try push_back and see the difference
-    QPointer<DataPoint> p = new DataPoint(point, _sample_rate);
-    _points.emplace_back(p);
+//    QPointer<DataPoint> p = new DataPoint(point, _sample_rate);
+    _points.emplace_back(new DataPoint(point, _sample_rate));
 }
 
 void PointsManager::RemovePoint(size_t idx)
 {
     if (idx < _points.size())
     {
+        delete _points[idx];
         _points.erase(_points.begin() + idx);
     }
     std::cout << "capacity: " << _points.capacity() << std::endl;

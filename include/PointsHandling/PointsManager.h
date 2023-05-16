@@ -23,7 +23,7 @@ public:
     bool Empty();
     void ClearPoints();
 
-    std::vector<QPointer<DataPoint>>& GetPoints();
+    std::vector<DataPoint *> &GetPoints();
 
 private:
     void AddPoint(cv::Point2f& point);
@@ -38,7 +38,7 @@ private:
     float _sample_rate;
 
     PointTracker* _PT_cap;
-    std::vector<QPointer<DataPoint>> _points;
+    std::vector<DataPoint*> _points;
 };
 
 #endif // POINT_MANAGER_H

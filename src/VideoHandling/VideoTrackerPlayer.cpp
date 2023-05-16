@@ -8,7 +8,8 @@ VideoTrackerPlayer::VideoTrackerPlayer(QMainWindow *image_window, QObject *paren
     precalcVideo_{ false },
     optflowType_{ OptflowType::SparseLucasKanade },
     _image_window{ image_window },
-    _FBH_cap_created{ false }
+    _FBH_cap_created{ false },
+    _FBH_optflow_cap_created{ false }
 {
     _PM_cap = new PointsManager();
 
@@ -45,16 +46,25 @@ bool VideoTrackerPlayer::LoadVideo(std::string filename)
     _FBH_cap = new CvFrameBufferHandler(filename);
     if (!_FBH_cap->Exists())
         return false;
+
     _framerate = _FBH_cap->GetFramerate();
     _PM_cap->UpdateSamplerate(_framerate);
-
-    if (_FBH_cap->GetChannelsAmount() == 4)
-    {
-        precalcVideo_ = true;
-        optflowType_ = OptflowType::Calculated;
-    }
-
     _FBH_cap_created = true;
+    precalcVideo_ = false;
+
+    return true;
+}
+
+bool VideoTrackerPlayer::LoadOptflow(std::string filename)
+{
+    _FBH_optflow_cap = new CvFrameBufferHandler(filename);
+    if (!_FBH_optflow_cap->Exists())
+        return false;
+
+    _FBH_optflow_cap_created = true;
+    precalcVideo_ = true;
+    optflowType_ = OptflowType::Calculated;
+
     return true;
 }
 
@@ -109,7 +119,15 @@ void VideoTrackerPlayer::run()
                 auto start_time = std::chrono::high_resolution_clock::now();
                 // DEBUG END
 
-                _PM_cap->ManageFrames(*_FBH_cap->GetPrevRgbFrame(), *_FBH_cap->GetCurrRgbFrame(), _cvFrame, optflowType_);
+                if (!_FBH_optflow_cap_created)
+                {
+                    _PM_cap->ManageFrames(*_FBH_cap->GetPrevRgbFrame(), *_FBH_cap->GetCurrRgbFrame(), _cvFrame, optflowType_);
+                }
+                else
+                {
+                    !_FBH_optflow_cap->ReadFrame();
+                    _PM_cap->ManageFrames(*_FBH_optflow_cap->GetPrevRgbFrame(), *_FBH_optflow_cap->GetCurrRgbFrame(), _cvFrame, optflowType_);
+                }
 
                 // DEBUG
                 auto end_time = std::chrono::high_resolution_clock::now();

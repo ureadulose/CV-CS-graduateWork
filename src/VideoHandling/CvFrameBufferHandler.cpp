@@ -46,19 +46,11 @@ bool CvFrameBufferHandler::WriteFrame(cv::Mat &frame)
     if (!_writerCap->isOpened())
         return false;
 
-    if (!frame.empty())
-    {
-        std::cout << "Writing processed frame" << std::endl;
-        _writerCap->write(frame);
-        return true;
-    }
-    else
-    {
-        std::cout << "Writing not-touched frame" << std::endl;
-        _writerCap->write(_curr_rgb_frame);
-        return true;
-    }
+    if (frame.empty())
+        return false;
 
+    _writerCap->write(frame);
+    return true;
 }
 
 cv::Mat* CvFrameBufferHandler::GetCurrRgbFrame()
@@ -92,7 +84,6 @@ void CvFrameBufferHandler::initializeVideoWriter(const std::string &filename)
     std::string videoName = std::filesystem::path(filename).stem().string();
     std::string extension = std::filesystem::path(filename).extension().string();
 
-    std::string outputFileName = folderName + "/output/" + videoName + "output" + extension; //"C:/Users/ass/Documents/qt-projects/CV-CS-graduateWork/output/12.mp4";//
-    _writerCap = new cv::VideoWriter(outputFileName, cv::VideoWriter::fourcc('X', 'V', 'I', 'D'), GetFramerate(), GetFrameSize());
-
+    std::string outputFileName = folderName + "/output/" + videoName + "output" + ".avi"/*extension*/; //"C:/Users/ass/Documents/qt-projects/CV-CS-graduateWork/output/12.mp4";//
+    _writerCap = new cv::VideoWriter(outputFileName, cv::VideoWriter::fourcc('D', 'I', 'V', 'X'), GetFramerate(), GetFrameSize());
 }

@@ -29,12 +29,14 @@ AmSpectrDialog::AmSpectrDialog(std::vector<float> &x, std::vector<float> &y, int
 
 AmSpectrDialog::~AmSpectrDialog()
 {
+    std::cout << "AmSpectrDialog destructor" << std::endl;
+    StopThreadAndFinish();
     delete _dataPlotter;
     delete _plotThread;
     delete ui;
 }
 
-void AmSpectrDialog::Startup()
+void AmSpectrDialog::SetupThread()
 {
     _plotThread = new QThread();
     // TODO: it's probably more clear to send actual delay and not framerate directly
@@ -48,6 +50,23 @@ void AmSpectrDialog::Startup()
 
 void AmSpectrDialog::closeEvent(QCloseEvent *ev)
 {
+    std::cout << "closeEvent of AmSpectrDialog" << std::endl;
+
+    StopThreadAndFinish();
+
+    emit finished();
+    std::cout << "closeEvent of AmSpectrDialog ended" << std::endl;
+}
+
+void AmSpectrDialog::msleep(int ms)
+{
+    struct timespec ts = { ms / 1000, (ms % 1000) * 1000 * 1000 };
+    nanosleep(&ts, NULL);
+
+}
+
+void AmSpectrDialog::StopThreadAndFinish()
+{
     _dataPlotter->StopPlotting();
 
     _plotThread->quit();
@@ -56,13 +75,4 @@ void AmSpectrDialog::closeEvent(QCloseEvent *ev)
     {
         _plotThread->wait();
     }
-
-    emit finished();
-}
-
-void AmSpectrDialog::msleep(int ms)
-{
-    struct timespec ts = { ms / 1000, (ms % 1000) * 1000 * 1000 };
-    nanosleep(&ts, NULL);
-
 }

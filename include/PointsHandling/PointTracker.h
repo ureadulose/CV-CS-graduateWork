@@ -13,7 +13,7 @@
 class PointTracker
 {
 public:
-    PointTracker(std::vector<QPointer<DataPoint>>* pts_to_be_tracked = nullptr);
+    PointTracker(std::vector<DataPoint*>* pts_to_be_tracked = nullptr);
 	~PointTracker();
 
 	/*! 
@@ -25,7 +25,7 @@ public:
 private:
 
 private:
-    std::vector<QPointer<DataPoint>>* _pts_to_be_tracked;
+    std::vector<DataPoint*>* _pts_to_be_tracked;
     cv::Mat _flow_frame;
 
 };

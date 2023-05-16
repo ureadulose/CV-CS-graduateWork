@@ -23,7 +23,7 @@ public:
     DataPoint(cv::Point2f& point, float& sample_rate, QObject *parent = nullptr);
     ~DataPoint();
 
-    void ShowSpectrum();
+    bool ShowSpectrum();
 
     void DrawPoint(cv::Mat& frame, bool drawArrow = false);
     void DrawData(cv::Mat& frame);
@@ -52,7 +52,6 @@ private:
 
 private:
     AmSpectrDialog *_amSpectrDialog;
-    DataPlotter *_plotThread;
 
     cv::Point2f _lastPos;
     std::vector<cv::Point2f> _positions;

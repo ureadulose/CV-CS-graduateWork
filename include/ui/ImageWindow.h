@@ -38,6 +38,9 @@ private slots:
     // Slot for the play push button
     void on_pushButton_2_clicked();
 
+    // Slot for the load optflow button
+    void on_pushButton_3_clicked();
+
     // Slot for getting current mouse position on a VideoFrame
     void MouseCurrentPos();
 

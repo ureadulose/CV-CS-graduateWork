@@ -31,7 +31,15 @@ void ProcessingPlayer::run()
         // DEBUG END
 
         ProcessManager_->ManageFrames(*_FBH_cap->GetPrevRgbFrame(), *_FBH_cap->GetCurrRgbFrame(), frame);
-        ProcessManager_->CombineFrames(*_FBH_cap->GetPrevRgbFrame(), *_FBH_cap->GetCurrRgbFrame(), frame);
+
+        std::vector<cv::Mat> frameChannels;
+        cv::split(frame, frameChannels);
+        std::vector<cv::Mat> optflowChannels(3);
+        optflowChannels[0] = frameChannels[0];
+        optflowChannels[1] = frameChannels[1];
+        optflowChannels[2] = frameChannels[1];
+        cv::merge(optflowChannels, frame);
+
         _FBH_cap->WriteFrame(frame);
 
         // DEBUG

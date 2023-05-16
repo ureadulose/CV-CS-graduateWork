@@ -23,7 +23,7 @@ public:
     explicit AmSpectrDialog(std::vector<float> &x, std::vector<float> &y, int framerate, QWidget *parent = nullptr);
     ~AmSpectrDialog();
 
-    void Startup();
+    void SetupThread();
 
     // TODO: make it safe
     Ui::AmSpectrDialog *ui;
@@ -36,6 +36,7 @@ private slots:
 
 private:
     void msleep(int ms);
+    void StopThreadAndFinish();
 
 private:
     QThread *_plotThread;

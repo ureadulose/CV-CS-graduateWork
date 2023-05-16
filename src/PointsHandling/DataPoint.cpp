@@ -2,6 +2,7 @@
 
 DataPoint::DataPoint(cv::Point2f& point, float& sample_rate, QObject *parent) :
     QObject(parent),
+    _amSpectrDialog{ nullptr },
     _lastPos{ point },
     _radius { 10 },
     _color { cv::Scalar(255, 255, 255) },
@@ -16,14 +17,21 @@ DataPoint::DataPoint(cv::Point2f& point, float& sample_rate, QObject *parent) :
 
 DataPoint::~DataPoint()
 {
+    std::cout<< "DataPoint destructor " << std::endl;
+    HideSpectrum();
 }
 
-void DataPoint::ShowSpectrum()
+bool DataPoint::ShowSpectrum()
 {
+    if (_amSpectrDialog != nullptr)
+        return false;
+
     _amSpectrDialog = new AmSpectrDialog(_freqs, _magnitudes, _sampleRate);
     QObject::connect(_amSpectrDialog, SIGNAL(finished()), this, SLOT(HideSpectrum()));
-    _amSpectrDialog->Startup();
+    _amSpectrDialog->SetupThread();
     _amSpectrDialog->show();
+
+    return true;
 }
 
 void DataPoint::DrawPoint(cv::Mat &frame, bool drawArrow)
@@ -164,6 +172,7 @@ cv::Rect &DataPoint::GetRoi()
 void DataPoint::HideSpectrum()
 {
     delete _amSpectrDialog;
+    _amSpectrDialog = nullptr;
 }
 
 void DataPoint::UpdateROI()

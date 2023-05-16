@@ -24,6 +24,7 @@ public:
     ~VideoTrackerPlayer();
 
     bool LoadVideo(std::string filename);
+    bool LoadOptflow(std::string filename);
     void Play();
     void Stop();
     bool isStopped() const;
@@ -44,6 +45,7 @@ protected:
 
 protected:
     CvFrameBufferHandler* _FBH_cap; // protected:
+    CvFrameBufferHandler* _FBH_optflow_cap; // protected:
     int _framerate; //protected:
     bool _stop; // protected:
     cv::Mat _cvFrame; // protected:
@@ -57,6 +59,7 @@ private:
     QMutex _mutex;
     QWaitCondition _cond;
     bool _FBH_cap_created;
+    bool _FBH_optflow_cap_created;
 };
 
 #endif // VIDEO_TRACKER_PLAYER_H

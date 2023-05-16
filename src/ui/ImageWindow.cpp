@@ -83,6 +83,31 @@ void ImageWindow::on_pushButton_2_clicked()
     }
 }
 
+void ImageWindow::on_pushButton_3_clicked()
+{
+    if (VTPlayer->isStopped())
+    {
+        QString filename = QFileDialog::getOpenFileName(this,
+                                                        tr("Open Video"), ".");/*,
+                                                        tr("Video Files (*.avi, *.mpg, *.mp4)"));*/
+        if (!filename.isEmpty())
+        {
+            if (!VTPlayer->LoadOptflow(filename.toStdString().data()))
+            {
+                QMessageBox msgBox;
+                msgBox.setText("ya kusok govna i ne mogu normalno rabotat. tebe stoilo vybrat ImGui :)"/*"The selected video could not be opened!"*/);
+                msgBox.exec();
+            }
+        }
+    }
+    else
+    {
+        QMessageBox msgBox;
+        msgBox.setText("Stop and reload the video first!");
+        msgBox.exec();
+    }
+}
+
 void ImageWindow::MouseCurrentPos()
 {
     ui->lblMousePos->setText(QString("X = %1, Y = %2").arg(ui->lblFrame->GetCurrentMousePos().x()).arg(ui->lblFrame->GetCurrentMousePos().y()));
