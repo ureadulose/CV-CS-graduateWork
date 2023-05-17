@@ -32,8 +32,11 @@ ImageWindow::~ImageWindow()
     delete ui;
 }
 
-cv::Point2f ImageWindow::MapToImageCoords(QSize map_size, cv::Size image_size, QPointF src_coords)
+cv::Point2f ImageWindow::QLabelToMatCoords(QSize qlabel_size, QSize map_size, cv::Size image_size)
 {
+    QSize lbl_pixmap_diff = qlabel_size - map_size;
+    QPointF src_coords = QPointF(ui->lblFrame->GetCurrentMousePos().x() - lbl_pixmap_diff.width() / 2, ui->lblFrame->GetCurrentMousePos().y() - lbl_pixmap_diff.height() / 2);
+
     float xScale = static_cast<float>(image_size.width) / static_cast<float>(map_size.width());
     float yScale = static_cast<float>(image_size.height) / static_cast<float>(map_size.height());
 
@@ -113,25 +116,14 @@ void ImageWindow::MouseCurrentPos()
     ui->lblMousePos->setText(QString("X = %1, Y = %2").arg(ui->lblFrame->GetCurrentMousePos().x()).arg(ui->lblFrame->GetCurrentMousePos().y()));
     if (!VTPlayer->isStopped())
     {
-        // calculating difference between pixmap size and lblFrame size (in which pixmap is drawn)
-        QSize lbl_pixmap_diff = ui->lblFrame->size() - ui->lblFrame->pixmap().size();
-        // calculating target point which is equal to (click coordinates - difference)
-        QPointF target = QPointF(ui->lblFrame->GetCurrentMousePos().x() - lbl_pixmap_diff.width(), ui->lblFrame->GetCurrentMousePos().y() - lbl_pixmap_diff.height() / 2);
-        // translating to framesize-based coordinates
-        cv::Point2f obj_coords = MapToImageCoords(ui->lblFrame->pixmap().size(), VTPlayer->GetFrameSize(), target);
-
+        cv::Point2f obj_coords = QLabelToMatCoords(ui->lblFrame->size(), ui->lblFrame->pixmap().size(), VTPlayer->GetFrameSize());
         emit NewMousePos(EventType::MouseMove, obj_coords);
     }
 }
 
 void ImageWindow::MousePressed(EventType event)
 {
-    // calculating difference between pixmap size and lblFrame size (in which pixmap is drawn)
-    QSize lbl_pixmap_diff = ui->lblFrame->size() - ui->lblFrame->pixmap().size();
-    // calculating target point which is equal to (click coordinates - difference)
-    QPointF target = QPointF(ui->lblFrame->GetCurrentMousePos().x() - lbl_pixmap_diff.width(), ui->lblFrame->GetCurrentMousePos().y() - lbl_pixmap_diff.height() / 2);
-    // translating to framesize-based coordinates
-    cv::Point2f obj_coords = MapToImageCoords(ui->lblFrame->pixmap().size(), VTPlayer->GetFrameSize(), target);
+    cv::Point2f obj_coords = QLabelToMatCoords(ui->lblFrame->size(), ui->lblFrame->pixmap().size(), VTPlayer->GetFrameSize());
 
     switch(event)
     {
