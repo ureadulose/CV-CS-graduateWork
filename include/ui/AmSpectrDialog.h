@@ -4,10 +4,7 @@
 #include <QDialog>
 #include <QThread>
 
-#include "QCustomPlot/qcustomplot.h"
 #include "QCustomPlot/DataPlotter.h"
-
-#include "opencv2/core.hpp"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -29,6 +26,7 @@ public:
     Ui::AmSpectrDialog *ui;
 
 signals:
+    // i know it is an overload (QDialog::finished()) but i cant think of a better name so probably rename it later
     void finished();
 
 private slots:

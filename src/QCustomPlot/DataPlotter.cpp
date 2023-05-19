@@ -10,7 +10,7 @@ DataPlotter::DataPlotter(AmSpectrDialog *plotting_canvas, std::vector<float> &x,
     _x { x },
     _y { y },
     _framerate{ framerate },
-    _plotting_canvas { plotting_canvas }
+    _plottingCanvas { plotting_canvas }
 {
     _stop = false;
 }
@@ -32,8 +32,8 @@ void DataPlotter::ExecutePlotting()
         std::copy(_x.begin(), _x.end(), x.begin());
         QVector<double> y(qAsConst(_y).size());
         std::copy(_y.begin(), _y.end(), y.begin());
-        _plotting_canvas->ui->plot->graph()->setData(x, y);
-        _plotting_canvas->ui->plot->replot();
+        _plottingCanvas->ui->plot->graph()->setData(x, y);
+        _plottingCanvas->ui->plot->replot();
 
         int delay = (1000/_framerate);
         this->msleep(delay);

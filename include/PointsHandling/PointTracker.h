@@ -5,7 +5,6 @@
 #include <opencv2/optflow.hpp>
 #include <opencv2/tracking.hpp>
 #include <opencv2/highgui.hpp>
-#include <opencv2/core/ocl.hpp>
 
 #include "PointsHandling/DataPoint.h"
 #include "MyEnums.h"
@@ -25,8 +24,8 @@ public:
 private:
 
 private:
-    std::vector<DataPoint*>* _pts_to_be_tracked;
-    cv::Mat _flow_frame;
+    std::vector<DataPoint*>* _pts2BeTracked;
+    cv::Mat _flowFrame;
 
 };
 

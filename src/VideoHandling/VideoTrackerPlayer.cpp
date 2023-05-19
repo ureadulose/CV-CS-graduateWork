@@ -1,19 +1,19 @@
 #include "VideoHandling/VideoTrackerPlayer.h"
 
-VideoTrackerPlayer::VideoTrackerPlayer(QMainWindow *image_window, QObject *parent) :
+VideoTrackerPlayer::VideoTrackerPlayer(QMainWindow *imageWindow, QObject *parent) :
     QThread(parent),
     _stop{ true },
-    precalcVideo_{ false },
-    optflowType_{ OptflowType::SparseLucasKanade },
-    _image_window{ image_window },
-    _FBH_cap_created{ false },
-    _FBH_optflow_cap_created{ false }
+    _precalcVideo{ false },
+    _optflowType{ OptflowType::SparseLucasKanade },
+    _imageWindow{ imageWindow },
+    _FbhCapCreated{ false },
+    _FbhOptflowCapCreated{ false }
 {
-    _PM_cap = new PointsManager();
+    _PmCap = new PointsManager();
 
-    QObject::connect(_image_window, SIGNAL(NewClick(EventType,cv::Point2f)),
+    QObject::connect(_imageWindow, SIGNAL(NewClick(EventType,cv::Point2f)),
                      this, SLOT(HandleMouseEvent(EventType,cv::Point2f)));
-    QObject::connect(_image_window, SIGNAL(NewMousePos(EventType,cv::Point2f)),
+    QObject::connect(_imageWindow, SIGNAL(NewMousePos(EventType,cv::Point2f)),
                      this, SLOT(HandleMouseEvent(EventType,cv::Point2f)));
 }
 
@@ -23,32 +23,32 @@ VideoTrackerPlayer::~VideoTrackerPlayer()
     _mutex.lock();
     _stop = true;
     std::cout << "VideoTrackerPlayer Destructor" << std::endl;
-    if (_FBH_cap_created)
-        delete _FBH_cap;
+    if (_FbhCapCreated)
+        delete _FbhCap;
 
     _cond.wakeOne();
     _mutex.unlock();
 
-    delete _PM_cap;
+    delete _PmCap;
 }
 
 bool VideoTrackerPlayer::LoadVideo(std::string filename)
 {
     // reset the Frame Buffer Handler
-    if (_FBH_cap_created)
+    if (_FbhCapCreated)
     {
-        delete _FBH_cap;
-        _FBH_cap_created = false;
+        delete _FbhCap;
+        _FbhCapCreated = false;
     }
 
-    _FBH_cap = new CvFrameBufferHandler(filename);
-    if (!_FBH_cap->Exists())
+    _FbhCap = new CvFrameBufferHandler(filename);
+    if (!_FbhCap->Exists())
         return false;
 
-    _framerate = _FBH_cap->GetFramerate();
-    _PM_cap->UpdateSamplerate(_framerate);
-    _FBH_cap_created = true;
-    precalcVideo_ = false;
+    _framerate = _FbhCap->GetFramerate();
+    _PmCap->UpdateSamplerate(_framerate);
+    _FbhCapCreated = true;
+    _precalcVideo = false;
 
     return true;
 }
@@ -59,9 +59,9 @@ bool VideoTrackerPlayer::LoadOptflow(std::string filename)
     if (!_FBH_optflow_cap->Exists())
         return false;
 
-    _FBH_optflow_cap_created = true;
-    precalcVideo_ = true;
-    optflowType_ = OptflowType::Calculated;
+    _FbhOptflowCapCreated = true;
+    _precalcVideo = true;
+    _optflowType = OptflowType::Calculated;
 
     return true;
 }
@@ -80,7 +80,6 @@ void VideoTrackerPlayer::Play()
 void VideoTrackerPlayer::Stop()
 {
     _stop = true;
-    emit pleaseStop();
 }
 
 bool VideoTrackerPlayer::isStopped() const
@@ -90,12 +89,12 @@ bool VideoTrackerPlayer::isStopped() const
 
 cv::Size VideoTrackerPlayer::GetFrameSize()
 {
-    return _FBH_cap->GetFrameSize();
+    return _FbhCap->GetFrameSize();
 }
 
 void VideoTrackerPlayer::HandleMouseEvent(EventType ev, cv::Point2f obj_coords)
 {
-    this->_PM_cap->ManageNewCoords(ev, obj_coords);
+    this->_PmCap->ManageNewCoords(ev, obj_coords);
 }
 
 void VideoTrackerPlayer::run()
@@ -104,27 +103,27 @@ void VideoTrackerPlayer::run()
     while (!_stop)
     {
         cv::Mat frame;
-        if (!_FBH_cap->ReadFrame())
+        if (!_FbhCap->ReadFrame())
         {
             _stop = true;
             break;
         }
-        _FBH_cap->GetCurrRgbFrame()->copyTo(_cvFrame);
+        _FbhCap->GetCurrRgbFrame()->copyTo(_cvFrame);
 
-        if (!_PM_cap->Empty())
+        if (!_PmCap->Empty())
             {
                 // DEBUG
                 auto start_time = std::chrono::high_resolution_clock::now();
                 // DEBUG END
 
-                if (!_FBH_optflow_cap_created)
+                if (!_FbhOptflowCapCreated)
                 {
-                    _PM_cap->ManageFrames(*_FBH_cap->GetPrevRgbFrame(), *_FBH_cap->GetCurrRgbFrame(), _cvFrame, optflowType_);
+                    _PmCap->ManageFrames(*_FbhCap->GetPrevRgbFrame(), *_FbhCap->GetCurrRgbFrame(), _cvFrame, _optflowType);
                 }
                 else
                 {
                     !_FBH_optflow_cap->ReadFrame();
-                    _PM_cap->ManageFrames(*_FBH_optflow_cap->GetPrevRgbFrame(), *_FBH_optflow_cap->GetCurrRgbFrame(), _cvFrame, optflowType_);
+                    _PmCap->ManageFrames(*_FBH_optflow_cap->GetPrevRgbFrame(), *_FBH_optflow_cap->GetCurrRgbFrame(), _cvFrame, _optflowType);
                 }
 
                 // DEBUG

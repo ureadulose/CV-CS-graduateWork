@@ -1,7 +1,5 @@
 #include "VideoProcessing/ProcessingPlayer.h"
 
-#include "ui/ProcessingWindow.h"
-
 ProcessingPlayer::ProcessingPlayer(QMainWindow *image_window, QObject *parent) :
     VideoTrackerPlayer(image_window)
 {
@@ -19,18 +17,18 @@ void ProcessingPlayer::run()
     while (!_stop)
     {
         cv::Mat frame;
-        if (!_FBH_cap->ReadFrame())
+        if (!_FbhCap->ReadFrame())
         {
             _stop = true;
             break;
         }
-        _FBH_cap->GetCurrRgbFrame()->copyTo(_cvFrame);
+        _FbhCap->GetCurrRgbFrame()->copyTo(_cvFrame);
 
         // DEBUG
         auto start_time = std::chrono::high_resolution_clock::now();
         // DEBUG END
 
-        ProcessManager_->ManageFrames(*_FBH_cap->GetPrevRgbFrame(), *_FBH_cap->GetCurrRgbFrame(), frame);
+        ProcessManager_->ManageFrames(*_FbhCap->GetPrevRgbFrame(), *_FbhCap->GetCurrRgbFrame(), frame);
 
         std::vector<cv::Mat> frameChannels;
         cv::split(frame, frameChannels);
@@ -40,7 +38,7 @@ void ProcessingPlayer::run()
         optflowChannels[2] = frameChannels[1];
         cv::merge(optflowChannels, frame);
 
-        _FBH_cap->WriteFrame(frame);
+        _FbhCap->WriteFrame(frame);
 
         // DEBUG
         auto end_time = std::chrono::high_resolution_clock::now();

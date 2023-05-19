@@ -37,7 +37,7 @@ private:
 private:
     float _sample_rate;
 
-    PointTracker* _PT_cap;
+    PointTracker* _PtCap;
     std::vector<DataPoint*> _points;
 };
 

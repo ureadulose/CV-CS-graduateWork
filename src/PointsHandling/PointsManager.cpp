@@ -4,7 +4,7 @@
 PointsManager::PointsManager()
 {
     // passing a link for a DataPoint vector which is handled in PointsManager and will be tracked in PointTracker
-    _PT_cap = new PointTracker(&_points);
+    _PtCap = new PointTracker(&_points);
 }
 
 PointsManager::~PointsManager()
@@ -15,7 +15,7 @@ PointsManager::~PointsManager()
     {
         RemovePoint(i - 1);
     }
-    delete _PT_cap;
+    delete _PtCap;
 }
 
 void PointsManager::UpdateSamplerate(float sample_rate)
@@ -105,7 +105,7 @@ void PointsManager::RemovePoint(size_t idx)
 
 cv::Point2f PointsManager::TrackPoints(cv::Mat &frame1, cv::Mat &frame2, OptflowType optflowType)
 {
-    _PT_cap->Track(frame1, frame2, optflowType);
+    _PtCap->Track(frame1, frame2, optflowType);
 }
 
 void PointsManager::CalculateDFourierTransforms()

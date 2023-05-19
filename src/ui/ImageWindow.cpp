@@ -33,16 +33,16 @@ ImageWindow::~ImageWindow()
     delete ui;
 }
 
-cv::Point2f ImageWindow::QLabelToMatCoords(QSize qlabel_size, QSize map_size, cv::Size image_size)
+cv::Point2f ImageWindow::QLabelToMatCoords(QSize qlabelSize, QSize mapSize, cv::Size image_size)
 {
-    QSize qlabelMapDiff = qlabel_size - map_size;
-    QPointF src_coords = QPointF(ui->lblFrame->GetCurrentMousePos().x() - qlabelMapDiff.width() / 2, ui->lblFrame->GetCurrentMousePos().y() - qlabelMapDiff.height() / 2);
+    QSize qlabelMapDiff = qlabelSize - mapSize;
+    QPointF srcCoords = QPointF(ui->lblFrame->GetCurrentMousePos().x() - qlabelMapDiff.width() / 2, ui->lblFrame->GetCurrentMousePos().y() - qlabelMapDiff.height() / 2);
 
-    float xScale = static_cast<float>(image_size.width) / static_cast<float>(map_size.width());
-    float yScale = static_cast<float>(image_size.height) / static_cast<float>(map_size.height());
+    float xScale = static_cast<float>(image_size.width) / static_cast<float>(mapSize.width());
+    float yScale = static_cast<float>(image_size.height) / static_cast<float>(mapSize.height());
 
-    int x = static_cast<int>(xScale * src_coords.x());
-    int y = static_cast<int>(yScale * src_coords.y());
+    int x = static_cast<int>(xScale * srcCoords.x());
+    int y = static_cast<int>(yScale * srcCoords.y());
 
     return cv::Point2f(x, y);
 }
@@ -64,7 +64,7 @@ void ImageWindow::updatePlayerUI(QImage img)
     if (!img.isNull())
     {
         ui->lblFrame->setAlignment(Qt::AlignCenter);
-        ui->lblFrame->setPixmap(QPixmap::fromImage(img).scaled(ui->lblFrame->width()-0.1, ui->lblFrame->height()-0.1/*ui->lblFrame->size()*/,
+        ui->lblFrame->setPixmap(QPixmap::fromImage(img).scaled(ui->lblFrame->width()-0.1, ui->lblFrame->height()-0.1,
                                                             Qt::KeepAspectRatio, Qt::FastTransformation));
     }
 }
@@ -129,25 +129,25 @@ void ImageWindow::MouseCurrentPos()
     ui->lblMousePos->setText(QString("X = %1, Y = %2").arg(ui->lblFrame->GetCurrentMousePos().x()).arg(ui->lblFrame->GetCurrentMousePos().y()));
     if (!VTPlayer->isStopped())
     {
-        cv::Point2f obj_coords = QLabelToMatCoords(ui->lblFrame->size(), ui->lblFrame->pixmap().size(), VTPlayer->GetFrameSize());
-        emit NewMousePos(EventType::MouseMove, obj_coords);
+        cv::Point2f objCoords = QLabelToMatCoords(ui->lblFrame->size(), ui->lblFrame->pixmap().size(), VTPlayer->GetFrameSize());
+        emit NewMousePos(EventType::MouseMove, objCoords);
     }
 }
 
 void ImageWindow::MousePressed(EventType event)
 {
-    cv::Point2f obj_coords = QLabelToMatCoords(ui->lblFrame->size(), ui->lblFrame->pixmap().size(), VTPlayer->GetFrameSize());
+    cv::Point2f objCoords = QLabelToMatCoords(ui->lblFrame->size(), ui->lblFrame->pixmap().size(), VTPlayer->GetFrameSize());
 
     switch(event)
     {
     case EventType::MouseLeftPressed:
     {
-        emit NewClick(EventType::MouseLeftPressed, obj_coords);
+        emit NewClick(EventType::MouseLeftPressed, objCoords);
         break;
     }
     case EventType::MouseRightPressed:
     {
-        emit NewClick(EventType::MouseRightPressed, obj_coords);
+        emit NewClick(EventType::MouseRightPressed, objCoords);
         std::cout<<"Right click"<<std::endl;
         break;
     }

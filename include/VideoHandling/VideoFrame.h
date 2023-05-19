@@ -24,7 +24,7 @@ public:
 
 
 private:
-    QPointF _curr_mouse_pos;
+    QPointF _currMousePos;
 
 signals:
     void MouseLeftButtonPressedSignal(EventType event);

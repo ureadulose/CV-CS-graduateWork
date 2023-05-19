@@ -15,10 +15,6 @@ public:
 
     void StopPlotting();
 
-    //TODO: delete it after testing
-signals:
-    void PlotDataSignal();
-
 public slots:
     void ExecutePlotting();
 
@@ -32,7 +28,7 @@ private:
     std::vector<float> &_y;
     int _framerate;
 
-    AmSpectrDialog *_plotting_canvas;
+    AmSpectrDialog *_plottingCanvas;
 
 };
 

@@ -11,7 +11,7 @@ VideoFrame::~VideoFrame()
 
 void VideoFrame::mouseMoveEvent(QMouseEvent *ev)
 {
-    this->_curr_mouse_pos = ev->position();
+    this->_currMousePos = ev->position();
     emit MousePosSignal();
 }
 
@@ -30,5 +30,5 @@ void VideoFrame::leaveEvent(QEvent *)
 
 QPointF VideoFrame::GetCurrentMousePos()
 {
-    return _curr_mouse_pos;
+    return _currMousePos;
 }

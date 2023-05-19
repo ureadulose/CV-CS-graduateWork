@@ -37,8 +37,8 @@ private:
 private:
     cv::VideoCapture* _videoCap;
     cv::VideoWriter* _writerCap;
-	cv::Mat _curr_rgb_frame;
-	cv::Mat _prev_rgb_frame;
+	cv::Mat _currRgbFrame;
+	cv::Mat _prevRgbFrame;
 };
 
 #endif // CV_FRAME_BUFFER_HANDLER_H

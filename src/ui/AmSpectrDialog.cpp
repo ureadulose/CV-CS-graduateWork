@@ -51,7 +51,7 @@ void AmSpectrDialog::SetupThread()
 
 void AmSpectrDialog::closeEvent(QCloseEvent *ev)
 {
-//    emit finished();
+    emit finished();
 }
 
 void AmSpectrDialog::msleep(int ms)

@@ -8,7 +8,7 @@ CvFrameBufferHandler::CvFrameBufferHandler(const std::string& filename, bool out
 		std::cerr << "Error: Could not open video file " << filename << std::endl;
         return;
 	}
-    _videoCap->read(_curr_rgb_frame);
+    _videoCap->read(_currRgbFrame);
 
     if (outputVideo)
         initializeVideoWriter(filename);
@@ -36,8 +36,8 @@ bool CvFrameBufferHandler::Exists()
 
 bool CvFrameBufferHandler::ReadFrame()
 {
-    _prev_rgb_frame = _curr_rgb_frame.clone();
-    return _videoCap->read(_curr_rgb_frame);
+    _prevRgbFrame = _currRgbFrame.clone();
+    return _videoCap->read(_currRgbFrame);
 }
 
 bool CvFrameBufferHandler::WriteFrame(cv::Mat &frame)
@@ -54,12 +54,12 @@ bool CvFrameBufferHandler::WriteFrame(cv::Mat &frame)
 
 cv::Mat* CvFrameBufferHandler::GetCurrRgbFrame()
 {
-    return &_curr_rgb_frame;
+    return &_currRgbFrame;
 }
 
 cv::Mat* CvFrameBufferHandler::GetPrevRgbFrame()
 {
-    return &_prev_rgb_frame;
+    return &_prevRgbFrame;
 }
 
 int CvFrameBufferHandler::GetFramerate()
@@ -74,7 +74,7 @@ cv::Size CvFrameBufferHandler::GetFrameSize()
 
 int CvFrameBufferHandler::GetChannelsAmount()
 {
-    return _curr_rgb_frame.channels();
+    return _currRgbFrame.channels();
 }
 
 void CvFrameBufferHandler::initializeVideoWriter(const std::string &filename)

@@ -37,14 +37,13 @@ public slots:
 signals:
     // Signal for outputting the frame to be displayed
     void ToBeDisplayed(const QImage &image);
-    void pleaseStop();
 
 protected:
     virtual void run();
     void msleep(int ms);
 
 protected:
-    CvFrameBufferHandler* _FBH_cap; // protected:
+    CvFrameBufferHandler* _FbhCap; // protected:
     CvFrameBufferHandler* _FBH_optflow_cap; // protected:
     int _framerate; //protected:
     bool _stop; // protected:
@@ -52,14 +51,14 @@ protected:
     QImage _qImg; // protected:
 
 private:
-    PointsManager* _PM_cap;
-    bool precalcVideo_;
-    OptflowType optflowType_;
-    QMainWindow* _image_window;
+    PointsManager* _PmCap;
+    bool _precalcVideo;
+    OptflowType _optflowType;
+    QMainWindow* _imageWindow;
     QMutex _mutex;
     QWaitCondition _cond;
-    bool _FBH_cap_created;
-    bool _FBH_optflow_cap_created;
+    bool _FbhCapCreated;
+    bool _FbhOptflowCapCreated;
 };
 
 #endif // VIDEO_TRACKER_PLAYER_H

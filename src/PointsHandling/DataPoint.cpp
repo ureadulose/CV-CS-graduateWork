@@ -90,23 +90,23 @@ void DataPoint::AddNewPosition(cv::Point2f pos)
 
 void DataPoint::CalculateDFT()
 {
-    const size_t samples_amount = _positions.size();
+    const size_t samplesAmount = _positions.size();
     std::vector<cv::Point2f> p2;
     std::vector<cv::Point2f> p1;
 
-    std::vector<cv::Point2f> normalized_positions;
-    cv::normalize(_positions, normalized_positions, 0, 1, cv::NORM_MINMAX);
+    std::vector<cv::Point2f> normalizedPositions;
+    cv::normalize(_positions, normalizedPositions, 0, 1, cv::NORM_MINMAX);
 
-    cv::dft(normalized_positions, _ft);
+    cv::dft(normalizedPositions, _ft);
 
     // computing two-sided spectrum P2
     for (size_t i = 0; i < _ft.size(); i++)
     {
-        p2.push_back(cv::Point2f(_ft[i].x / (float)(samples_amount), _ft[i].y / (float)(samples_amount)));
+        p2.push_back(cv::Point2f(_ft[i].x / (float)(samplesAmount), _ft[i].y / (float)(samplesAmount)));
     }
 
     // computing single-sided spectrum p1 based on p2 and even-valued signal length
-    for (size_t i = 0; i < samples_amount; i++)
+    for (size_t i = 0; i < samplesAmount; i++)
     {
         size_t idx = 0;
         idx = (size_t)(((double)(i)) / 2.0 + 1.0);
@@ -115,18 +115,18 @@ void DataPoint::CalculateDFT()
 
     // possible frequencies
     std::vector<float> freqs;
-    for(size_t i = 0; i < samples_amount; i++)
+    for(size_t i = 0; i < samplesAmount; i++)
     {
-        float tmp = _sampleRate * ((float)(i) / 2.f) / (float)(samples_amount);
+        float tmp = _sampleRate * ((float)(i) / 2.f) / (float)(samplesAmount);
         freqs.push_back(tmp);
     }
 
     // computing magnitude
     std::vector<float> magnitudes;
-    for (size_t i = 0; i < samples_amount; i++)
+    for (size_t i = 0; i < samplesAmount; i++)
     {
-        float current_magnitude = sqrt(p1[i].x * p1[i].x + p1[i].y * p1[i].y);
-        magnitudes.push_back(current_magnitude);
+        float currentMagnitude = sqrt(p1[i].x * p1[i].x + p1[i].y * p1[i].y);
+        magnitudes.push_back(currentMagnitude);
     }
 
     _freqs = freqs;
@@ -134,7 +134,7 @@ void DataPoint::CalculateDFT()
 
     // finding max value in magnitudes vector
     auto itt_max = std::max_element(magnitudes.begin(), magnitudes.end());
-    int max_idx = std::distance(magnitudes.begin(), itt_max);
+    int maxIdx = std::distance(magnitudes.begin(), itt_max);
 }
 
 bool DataPoint::HitTest(cv::Point2f &point)

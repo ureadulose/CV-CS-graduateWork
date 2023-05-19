@@ -2,7 +2,7 @@
 #include <iostream>
 
 PointTracker::PointTracker(std::vector<DataPoint *> *pts_to_be_tracked) :
-    _pts_to_be_tracked{ pts_to_be_tracked }
+    _pts2BeTracked{ pts_to_be_tracked }
 {
 }
 
@@ -28,12 +28,12 @@ void PointTracker::Track(cv::Mat& frame1, cv::Mat& frame2, OptflowType type)
     {
     case OptflowType::DenseFarneback:
     {
-        cv::calcOpticalFlowFarneback(frame1_gray, frame2_gray, _flow_frame, 0.5, 3, 15, 3, 5, 1.2, 0);
+        cv::calcOpticalFlowFarneback(frame1_gray, frame2_gray, _flowFrame, 0.5, 3, 15, 3, 5, 1.2, 0);
         break;
     }
     case OptflowType::SparceToDense:
     {
-        cv::optflow::calcOpticalFlowSparseToDense(frame1_gray, frame2_gray, _flow_frame, 8, 128, 0.01);
+        cv::optflow::calcOpticalFlowSparseToDense(frame1_gray, frame2_gray, _flowFrame, 8, 128, 0.01);
         break;
     }
     case OptflowType::SparseLucasKanade:
@@ -45,7 +45,7 @@ void PointTracker::Track(cv::Mat& frame1, cv::Mat& frame2, OptflowType type)
         cv::Size winSize(40, 40);
         int maxLevel = 2;
 
-        for (auto &point : *_pts_to_be_tracked)
+        for (auto &point : *_pts2BeTracked)
         {
             prevPts.push_back(point->GetLastPos());
         }
@@ -56,23 +56,23 @@ void PointTracker::Track(cv::Mat& frame1, cv::Mat& frame2, OptflowType type)
                                      0.001
                                      ),
                                  cv::OPTFLOW_LK_GET_MIN_EIGENVALS);
-        for (size_t i = 0; i < _pts_to_be_tracked->size(); i++)
+        for (size_t i = 0; i < _pts2BeTracked->size(); i++)
         {
-            (*_pts_to_be_tracked)[i]->AddNewPosition(nextPts[i]);
+            (*_pts2BeTracked)[i]->AddNewPosition(nextPts[i]);
         }
         break;
     }
     case OptflowType::DeepFlow:
     {
         cv::Ptr<cv::DenseOpticalFlow> deepFlow = cv::optflow::createOptFlow_DeepFlow();
-        deepFlow->calc(frame1_gray, frame2_gray, _flow_frame);
+        deepFlow->calc(frame1_gray, frame2_gray, _flowFrame);
 
         break;
     }
     case OptflowType::SimpleFlow:
     {
         cv::Ptr<cv::DenseOpticalFlow> deepFlow = cv::optflow::createOptFlow_SimpleFlow();
-        deepFlow->calc(frame1_gray, frame2_gray, _flow_frame);
+        deepFlow->calc(frame1_gray, frame2_gray, _flowFrame);
 
         break;
     }
@@ -84,18 +84,18 @@ void PointTracker::Track(cv::Mat& frame1, cv::Mat& frame2, OptflowType type)
         std::vector<cv::Mat> optflowChannels(2);
         optflowChannels[0] = frame2Channels[0];
         optflowChannels[1] = frame2Channels[1];
-        cv::merge(optflowChannels, _flow_frame);
+        cv::merge(optflowChannels, _flowFrame);
 
         break;
     }
     }
 
     // after calculating flow put displacement to our points
-    if ((!_flow_frame.empty()) && (_pts_to_be_tracked != nullptr))
+    if ((!_flowFrame.empty()) && (_pts2BeTracked != nullptr))
     {
-        for (auto &point : *_pts_to_be_tracked)
+        for (auto &point : *_pts2BeTracked)
         {
-            cv::Point2f displacement = _flow_frame.at<cv::Point2f>(point->GetLastPos().y, point->GetLastPos().x);
+            cv::Point2f displacement = _flowFrame.at<cv::Point2f>(point->GetLastPos().y, point->GetLastPos().x);
             point->AddNewPosition(point->GetLastPos() + displacement);
         }
     }
@@ -103,5 +103,5 @@ void PointTracker::Track(cv::Mat& frame1, cv::Mat& frame2, OptflowType type)
 
 cv::Mat* PointTracker::GetOptflow()
 {
-    return &_flow_frame;
+    return &_flowFrame;
 }
