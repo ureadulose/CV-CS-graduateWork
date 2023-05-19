@@ -24,7 +24,6 @@ CvFrameBufferHandler::~CvFrameBufferHandler()
 
     if (_writerCap->isOpened())
     {
-        std::cout << "Releasing writer cap" << std::endl;
         _writerCap->release();
         delete _writerCap;
     }

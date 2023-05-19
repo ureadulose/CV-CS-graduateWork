@@ -14,13 +14,11 @@ void PointTracker::Track(cv::Mat& frame1, cv::Mat& frame2, OptflowType type)
 {
 	cv::Mat flow, frame1_gray, frame2_gray;
 
-    std::cout << "perform grayscaling" << std::endl;
     // Transforming current and previous frames to gray scale if they arent already
 	if (frame1.channels() > 1)
 		cv::cvtColor(frame1, frame1_gray, cv::COLOR_BGR2GRAY);
 	if (frame2.channels() > 1)
         cv::cvtColor(frame2, frame2_gray, cv::COLOR_BGR2GRAY);
-    std::cout << "done performing grayscaling" << std::endl;
 
     // blur frames a little bit to remove some noise
     cv::GaussianBlur(frame1_gray, frame1_gray, cv::Size(3, 3), 0);
@@ -51,7 +49,6 @@ void PointTracker::Track(cv::Mat& frame1, cv::Mat& frame2, OptflowType type)
         {
             prevPts.push_back(point->GetLastPos());
         }
-        std::cout << "Started calculating opticalflowPyrLK" << std::endl;
         cv::calcOpticalFlowPyrLK(frame1_gray, frame2_gray, prevPts, nextPts, status, error, winSize, maxLevel,
                                  cv::TermCriteria(
                                      cv::TermCriteria::MAX_ITER | cv::TermCriteria::EPS,
@@ -59,12 +56,10 @@ void PointTracker::Track(cv::Mat& frame1, cv::Mat& frame2, OptflowType type)
                                      0.001
                                      ),
                                  cv::OPTFLOW_LK_GET_MIN_EIGENVALS);
-        std::cout << "Stopped calculating opticalflowPyrLK" << std::endl;
         for (size_t i = 0; i < _pts_to_be_tracked->size(); i++)
         {
             (*_pts_to_be_tracked)[i]->AddNewPosition(nextPts[i]);
         }
-        std::cout << "Added new point" << std::endl;
         break;
     }
     case OptflowType::DeepFlow:
@@ -83,7 +78,6 @@ void PointTracker::Track(cv::Mat& frame1, cv::Mat& frame2, OptflowType type)
     }
     case OptflowType::Calculated:
     {
-        std::cout << "Calcualted optflow" << std::endl;
         // TODO: recreate it in a more clear way. now it's just hard coding
         std::vector<cv::Mat> frame2Channels;
         cv::split(frame2, frame2Channels);

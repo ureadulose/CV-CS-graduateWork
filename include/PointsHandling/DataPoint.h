@@ -52,6 +52,7 @@ private:
 
 private:
     AmSpectrDialog *_amSpectrDialog;
+//    QDialog *_amSpectrDialog;
 
     cv::Point2f _lastPos;
     std::vector<cv::Point2f> _positions;

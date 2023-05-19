@@ -9,6 +9,12 @@ PointsManager::PointsManager()
 
 PointsManager::~PointsManager()
 {
+    // TODO: right now everything looks a little bit motley (if i translated it right).
+    // have to make everything more clear and similar. should more be sticking to DRY and KISS
+    for (size_t i = _points.size(); i > 0; i--)
+    {
+        RemovePoint(i - 1);
+    }
     delete _PT_cap;
 }
 
@@ -89,14 +95,12 @@ void PointsManager::AddPoint(cv::Point2f &point)
 
 void PointsManager::RemovePoint(size_t idx)
 {
+//    idx = idx - 1;
     if (idx < _points.size())
     {
         delete _points[idx];
         _points.erase(_points.begin() + idx);
     }
-    std::cout << "capacity: " << _points.capacity() << std::endl;
-    std::cout << "max_size: " << _points.max_size() << std::endl;
-    std::cout << "current size: " << _points.size() << std::endl;
 }
 
 cv::Point2f PointsManager::TrackPoints(cv::Mat &frame1, cv::Mat &frame2, OptflowType optflowType)

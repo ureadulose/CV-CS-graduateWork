@@ -29,8 +29,9 @@ AmSpectrDialog::AmSpectrDialog(std::vector<float> &x, std::vector<float> &y, int
 
 AmSpectrDialog::~AmSpectrDialog()
 {
-    std::cout << "AmSpectrDialog destructor" << std::endl;
     StopThreadAndFinish();
+//    hide();
+    std::cout<<"ASD DESTRUCT!"<<std::endl;
     delete _dataPlotter;
     delete _plotThread;
     delete ui;
@@ -50,12 +51,7 @@ void AmSpectrDialog::SetupThread()
 
 void AmSpectrDialog::closeEvent(QCloseEvent *ev)
 {
-    std::cout << "closeEvent of AmSpectrDialog" << std::endl;
-
-    StopThreadAndFinish();
-
-    emit finished();
-    std::cout << "closeEvent of AmSpectrDialog ended" << std::endl;
+//    emit finished();
 }
 
 void AmSpectrDialog::msleep(int ms)

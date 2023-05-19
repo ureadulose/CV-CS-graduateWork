@@ -28,14 +28,15 @@ ImageWindow::ImageWindow(QWidget *parent)
 
 ImageWindow::~ImageWindow()
 {
+    StopThreadAndFinish();
     delete VTPlayer;
     delete ui;
 }
 
 cv::Point2f ImageWindow::QLabelToMatCoords(QSize qlabel_size, QSize map_size, cv::Size image_size)
 {
-    QSize lbl_pixmap_diff = qlabel_size - map_size;
-    QPointF src_coords = QPointF(ui->lblFrame->GetCurrentMousePos().x() - lbl_pixmap_diff.width() / 2, ui->lblFrame->GetCurrentMousePos().y() - lbl_pixmap_diff.height() / 2);
+    QSize qlabelMapDiff = qlabel_size - map_size;
+    QPointF src_coords = QPointF(ui->lblFrame->GetCurrentMousePos().x() - qlabelMapDiff.width() / 2, ui->lblFrame->GetCurrentMousePos().y() - qlabelMapDiff.height() / 2);
 
     float xScale = static_cast<float>(image_size.width) / static_cast<float>(map_size.width());
     float yScale = static_cast<float>(image_size.height) / static_cast<float>(map_size.height());
@@ -44,6 +45,18 @@ cv::Point2f ImageWindow::QLabelToMatCoords(QSize qlabel_size, QSize map_size, cv
     int y = static_cast<int>(yScale * src_coords.y());
 
     return cv::Point2f(x, y);
+}
+
+void ImageWindow::StopThreadAndFinish()
+{
+    VTPlayer->Stop();
+
+    VTPlayer->quit();
+
+    if (VTPlayer->isRunning())
+    {
+        VTPlayer->wait();
+    }
 }
 
 void ImageWindow::updatePlayerUI(QImage img)

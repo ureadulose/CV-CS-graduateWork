@@ -11,6 +11,7 @@ class DataPlotter : public QObject
 
 public:
     explicit DataPlotter(AmSpectrDialog *plotting_canvas, std::vector<float> &x, std::vector<float> &y, int framerate, QObject *parent = nullptr);
+    ~DataPlotter();
 
     void StopPlotting();
 

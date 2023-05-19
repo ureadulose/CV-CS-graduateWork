@@ -1,7 +1,5 @@
 #include "VideoHandling/VideoTrackerPlayer.h"
 
-#include "ui/ImageWindow.h"
-
 VideoTrackerPlayer::VideoTrackerPlayer(QMainWindow *image_window, QObject *parent) :
     QThread(parent),
     _stop{ true },
@@ -24,7 +22,7 @@ VideoTrackerPlayer::~VideoTrackerPlayer()
     // Wait til we release VideoCapture from _FBH_cap and wait until run method will be exited
     _mutex.lock();
     _stop = true;
-
+    std::cout << "VideoTrackerPlayer Destructor" << std::endl;
     if (_FBH_cap_created)
         delete _FBH_cap;
 

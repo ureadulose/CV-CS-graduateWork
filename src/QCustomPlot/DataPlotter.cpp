@@ -15,10 +15,17 @@ DataPlotter::DataPlotter(AmSpectrDialog *plotting_canvas, std::vector<float> &x,
     _stop = false;
 }
 
+DataPlotter::~DataPlotter()
+{
+    std::cout<<"DP DESTRUCT!"<<std::endl;
+
+}
+
 void DataPlotter::ExecutePlotting()
 {
     while (!_stop)
     {
+        std::cout<<"Executing plotting"<<std::endl;
         // TODO: make it more efficient (right now there are a lot of copying and etc.)
         // Transform std::vector to QVector
         QVector<double> x(qAsConst(_x).size());
@@ -31,6 +38,7 @@ void DataPlotter::ExecutePlotting()
         int delay = (1000/_framerate);
         this->msleep(delay);
     }
+    std::cout<<"Stopped plotting"<<std::endl;
 }
 
 void DataPlotter::StopPlotting()

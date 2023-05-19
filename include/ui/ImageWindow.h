@@ -23,6 +23,7 @@ public:
 private:
     // refactor this
     cv::Point2f QLabelToMatCoords(QSize qlabel_size, QSize map_size, cv::Size image_size);
+    void StopThreadAndFinish();
 
 signals:
     void NewClick(EventType ev, const cv::Point2f coordinates);
