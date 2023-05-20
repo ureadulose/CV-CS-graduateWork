@@ -5,7 +5,7 @@
 #include <iostream>
 #include <QDebug>
 
-AmSpectrDialog::AmSpectrDialog(std::vector<float> &x, std::vector<float> &y, int framerate, QWidget *parent) :
+AmSpectrDialog::AmSpectrDialog(std::vector<float> &x, std::vector<float> &y, int framerate, float maxVal, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::AmSpectrDialog),
     _stop { false },
@@ -19,7 +19,7 @@ AmSpectrDialog::AmSpectrDialog(std::vector<float> &x, std::vector<float> &y, int
     ui->plot->yAxis->setLabel("");
     ui->plot->xAxis->setLabel("Frequency");
     ui->plot->xAxis->setRange(0.0, (double)(framerate) / 2.0);
-    ui->plot->yAxis->setRange(0.0, 0.01);
+    ui->plot->yAxis->setRange(0.0, (double)(maxVal));
     ui->plot->replot();
     ui->plot->clearGraphs();
     ui->plot->addGraph();

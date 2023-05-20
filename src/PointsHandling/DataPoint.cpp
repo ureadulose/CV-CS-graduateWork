@@ -7,7 +7,8 @@ DataPoint::DataPoint(cv::Point2f& point, float& sample_rate, QObject *parent) :
     _radius { 10 },
     _color { cv::Scalar(255, 255, 255) },
     _interacting { false },
-    _sampleRate{ sample_rate }
+    _sampleRate{ sample_rate },
+    _currFrequency{ 0.0 }
 {
     UpdateROI();
 
@@ -17,11 +18,7 @@ DataPoint::DataPoint(cv::Point2f& point, float& sample_rate, QObject *parent) :
 
 DataPoint::~DataPoint()
 {
-    if (_amSpectrDialog != nullptr)
-    {
-        _amSpectrDialog->close();
-        HideSpectrum();
-    }
+    HideSpectrum();
 }
 
 bool DataPoint::ShowSpectrum()
@@ -29,7 +26,7 @@ bool DataPoint::ShowSpectrum()
     if (_amSpectrDialog != nullptr)
         return false;
 
-    _amSpectrDialog = new AmSpectrDialog(_freqs, _magnitudes, _sampleRate);
+    _amSpectrDialog = new AmSpectrDialog(_freqs, _magnitudes, _sampleRate, _currFrequency);
     _amSpectrDialog->setAttribute(Qt::WA_DeleteOnClose);
     QObject::connect(_amSpectrDialog, SIGNAL(finished()), this, SLOT(HideSpectrum()));
     _amSpectrDialog->SetupThread();
@@ -135,6 +132,8 @@ void DataPoint::CalculateDFT()
     // finding max value in magnitudes vector
     auto itt_max = std::max_element(magnitudes.begin(), magnitudes.end());
     int maxIdx = std::distance(magnitudes.begin(), itt_max);
+
+    _currFrequency = magnitudes[maxIdx];
 }
 
 bool DataPoint::HitTest(cv::Point2f &point)
@@ -173,8 +172,12 @@ cv::Rect &DataPoint::GetRoi()
 
 void DataPoint::HideSpectrum()
 {
-    delete _amSpectrDialog;
-    _amSpectrDialog = nullptr;
+    if (_amSpectrDialog != nullptr)
+    {
+        _amSpectrDialog->close();
+        delete _amSpectrDialog;
+        _amSpectrDialog = nullptr;
+    }
 }
 
 void DataPoint::UpdateROI()

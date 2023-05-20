@@ -17,7 +17,7 @@ class AmSpectrDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit AmSpectrDialog(std::vector<float> &x, std::vector<float> &y, int framerate, QWidget *parent = nullptr);
+    explicit AmSpectrDialog(std::vector<float> &x, std::vector<float> &y, int framerate, float maxVal = 0.01f, QWidget *parent = nullptr);
     ~AmSpectrDialog();
 
     void SetupThread();
