@@ -42,7 +42,7 @@ void PointTracker::Track(cv::Mat& frame1, cv::Mat& frame2, OptflowType type)
         std::vector<cv::Point2f> nextPts;
         std::vector<uchar> status;
         std::vector<float> error;
-        cv::Size winSize(40, 40);
+        cv::Size winSize(60, 60);
         int maxLevel = 2;
 
         for (auto &point : *_pts2BeTracked)
