@@ -63,7 +63,7 @@ private:
 
     float _sampleRate;
     std::vector<cv::Point2f> _ft;
-    float _currFrequency;
+    float _maxMagnitude;
 
     // probably temporary
     std::vector<float> _magnitudes;

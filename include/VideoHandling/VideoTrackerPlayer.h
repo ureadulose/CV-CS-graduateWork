@@ -2,8 +2,8 @@
 #define VIDEO_TRACKER_PLAYER_H
 
 // my headers
-#include "VideoHandling/CvFrameBufferHandler.h"
 #include "PointsHandling/PointsManager.h"
+#include "VideoHandling/CvFrameBufferHandler.h"
 #include "MyEnums.h"
 
 #include <QImage>
@@ -33,6 +33,7 @@ public:
 
 public slots:
     void HandleMouseEvent(EventType ev, cv::Point2f obj_coords);
+    void SetPosition(int value);
 
 signals:
     // Signal for outputting the frame to be displayed

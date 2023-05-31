@@ -3,6 +3,10 @@
 
 #include <QObject>
 
+// apparently QCustomPlot can't handle high fps on PCs with low performance (which probably isn't really needed cause it's just a plot)
+// but anyway i had runtime errors even when it refreshes with 30 fps, change plot later
+const int LIVE_CALC_REFRESH_RATIO = 8;
+
 class AmSpectrDialog;
 
 class DataPlotter : public QObject

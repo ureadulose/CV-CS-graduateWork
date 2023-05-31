@@ -97,6 +97,11 @@ void VideoTrackerPlayer::HandleMouseEvent(EventType ev, cv::Point2f obj_coords)
     this->_PmCap->ManageNewCoords(ev, obj_coords);
 }
 
+void VideoTrackerPlayer::SetPosition(int value)
+{
+    std::cout << "cum " << value << std::endl;
+}
+
 void VideoTrackerPlayer::run()
 {
     int delay = (1000/_framerate);
@@ -130,7 +135,7 @@ void VideoTrackerPlayer::run()
                 auto end_time = std::chrono::high_resolution_clock::now();
                 auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count();
                 std::string result = "Time consuming: " + std::to_string(duration) + " us";
-                std::cout << result << std::endl;
+                //std::cout << result << std::endl;
                 // DEBUG END
             }
 

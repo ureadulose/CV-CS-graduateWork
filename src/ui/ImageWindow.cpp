@@ -12,6 +12,7 @@ ImageWindow::ImageWindow(QWidget *parent)
                      this, SLOT(updatePlayerUI(QImage)));
 
     ui->setupUi(this);
+    QObject::connect(ui->playbackSlider, SIGNAL(valueChanged(int)), VTPlayer, SLOT(SetPosition(int)));
 
     QObject::connect(ui->lblFrame, SIGNAL(MousePosSignal()),
                      this, SLOT(MouseCurrentPos()));
