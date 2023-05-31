@@ -35,7 +35,7 @@ void DataPlotter::ExecutePlotting()
         _plottingCanvas->ui->plot->graph()->setData(x, y);
         _plottingCanvas->ui->plot->replot();
 
-        int delay = (2*1000/_framerate);
+        int delay = (8*1000/_framerate);
         this->msleep(delay);
     }
     std::cout<<"Stopped plotting"<<std::endl;
