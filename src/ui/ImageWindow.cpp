@@ -3,13 +3,13 @@
 
 #include "VideoHandling/videoframe.h"
 
-ImageWindow::ImageWindow(QWidget *parent)
-    : QMainWindow(parent)
-    , ui(new Ui::ImageWindow)
+ImageWindow::ImageWindow(QWidget *parent) :
+    QMainWindow(parent),
+    ui(new Ui::ImageWindow)
 {
     VTPlayer = new VideoTrackerPlayer(this);
-    QObject::connect(VTPlayer, SIGNAL(ToBeDisplayed(QImage)),
-                     this, SLOT(updatePlayerUI(QImage)));
+    QObject::connect(VTPlayer, SIGNAL(ToBeDisplayed(QImage,int)),
+                     this, SLOT(updatePlayerUI(QImage,int)));
 
     ui->setupUi(this);
     QObject::connect(ui->playbackSlider, SIGNAL(valueChanged(int)), VTPlayer, SLOT(SetPosition(int)));
@@ -60,13 +60,17 @@ void ImageWindow::StopThreadAndFinish()
     }
 }
 
-void ImageWindow::updatePlayerUI(QImage img)
+void ImageWindow::updatePlayerUI(QImage img, int framePos)
 {
     if (!img.isNull())
     {
+        // Update frame container
         ui->lblFrame->setAlignment(Qt::AlignCenter);
         ui->lblFrame->setPixmap(QPixmap::fromImage(img).scaled(ui->lblFrame->width()-0.1, ui->lblFrame->height()-0.1,
                                                             Qt::KeepAspectRatio, Qt::FastTransformation));
+
+        // Update playback slider
+        ui->playbackSlider->setSliderPosition(framePos);
     }
 }
 
@@ -77,12 +81,22 @@ void ImageWindow::on_pushButton_clicked()
                                                     tr("Video Files (*.avi, *.mpg, *.mp4)"));
     if (!filename.isEmpty())
     {
+        if (!VTPlayer->isStopped())
+        {
+            VTPlayer->Stop();
+            // TODO: probably make it more clear: when Stop() method is called it emits the signal and then text on a button changes
+            ui->pushButton_2->setText(tr("Play"));
+        }
+
         if (!VTPlayer->LoadVideo(filename.toStdString().data()))
         {
             QMessageBox msgBox;
             msgBox.setText("The selected video could not be opened!");
             msgBox.exec();
         }
+
+        // Update playbackSlider maximum value
+        ui->playbackSlider->setMaximum(VTPlayer->GetFramesAmount());
     }
 }
 
@@ -112,7 +126,7 @@ void ImageWindow::on_pushButton_3_clicked()
             if (!VTPlayer->LoadOptflow(filename.toStdString().data()))
             {
                 QMessageBox msgBox;
-                msgBox.setText("ya kusok govna i ne mogu normalno rabotat. tebe stoilo vybrat ImGui :)"/*"The selected video could not be opened!"*/);
+                msgBox.setText("The selected video could not be opened!");
                 msgBox.exec();
             }
         }

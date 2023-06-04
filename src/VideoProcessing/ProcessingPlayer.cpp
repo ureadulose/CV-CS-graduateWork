@@ -51,7 +51,7 @@ void ProcessingPlayer::run()
         _qImg = QImage((const unsigned char*)(_cvFrame.data),
                       _cvFrame.cols, _cvFrame.rows, QImage::Format_RGB888);
 
-        emit ToBeDisplayed(_qImg);
+        emit ToBeDisplayed(_qImg, _FBH_optflow_cap->GetCurrFramePos());
         this->msleep(delay);
     }
 }

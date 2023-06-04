@@ -31,7 +31,7 @@ signals:
 
 private slots:
     // Display video frame in player UI
-    void updatePlayerUI(QImage img);
+    void updatePlayerUI(QImage img, int framePos);
 
     // Slot for the load video push button
     void on_pushButton_clicked();
