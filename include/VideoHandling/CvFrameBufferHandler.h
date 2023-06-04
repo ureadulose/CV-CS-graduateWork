@@ -30,6 +30,8 @@ public:
     int GetFramerate();
     cv::Size GetFrameSize();
     int GetChannelsAmount();
+    int GetCurrFramePos();
+    int GetFramesAmount();
 
 private:
     void initializeVideoWriter(const std::string& filename);

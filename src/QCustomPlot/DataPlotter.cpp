@@ -53,6 +53,7 @@ void DataPlotter::ExecutePlotting()
         _plottingCanvas->ui->plotVer->replot();
 
         int delay = (LIVE_CALC_REFRESH_RATIO*1000/_framerate);
+
         this->msleep(delay);
     }
     std::cout<<"Stopped plotting"<<std::endl;

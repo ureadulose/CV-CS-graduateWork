@@ -77,6 +77,16 @@ int CvFrameBufferHandler::GetChannelsAmount()
     return _currRgbFrame.channels();
 }
 
+int CvFrameBufferHandler::GetCurrFramePos()
+{
+    return _videoCap->get(cv::CAP_PROP_POS_FRAMES);
+}
+
+int CvFrameBufferHandler::GetFramesAmount()
+{
+    return _videoCap->get(cv::CAP_PROP_FRAME_COUNT);
+}
+
 void CvFrameBufferHandler::initializeVideoWriter(const std::string &filename)
 {
     std::string folderName = std::filesystem::path(filename).parent_path().string();

@@ -30,6 +30,7 @@ public:
     bool isStopped() const;
     // Video Parameters
     cv::Size GetFrameSize();
+    int GetFramesAmount();
 
 public slots:
     void HandleMouseEvent(EventType ev, cv::Point2f obj_coords);
@@ -37,7 +38,7 @@ public slots:
 
 signals:
     // Signal for outputting the frame to be displayed
-    void ToBeDisplayed(const QImage &image);
+    void ToBeDisplayed(const QImage &image, int framePos);
 
 protected:
     virtual void run();

@@ -92,6 +92,11 @@ cv::Size VideoTrackerPlayer::GetFrameSize()
     return _FbhCap->GetFrameSize();
 }
 
+int VideoTrackerPlayer::GetFramesAmount()
+{
+    return _FbhCap->GetFramesAmount();
+}
+
 void VideoTrackerPlayer::HandleMouseEvent(EventType ev, cv::Point2f obj_coords)
 {
     this->_PmCap->ManageNewCoords(ev, obj_coords);
@@ -143,7 +148,7 @@ void VideoTrackerPlayer::run()
         _qImg = QImage((const unsigned char*)(_cvFrame.data),
                       _cvFrame.cols, _cvFrame.rows, QImage::Format_RGB888);
 
-        emit ToBeDisplayed(_qImg);
+        emit ToBeDisplayed(_qImg, _FbhCap->GetCurrFramePos());
         this->msleep(delay);
     }
 }
