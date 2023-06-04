@@ -5,10 +5,12 @@
 // for debug purposes
 #include <iostream>
 
-DataPlotter::DataPlotter(AmSpectrDialog *plotting_canvas, std::vector<float> &x, std::vector<float> &y, int framerate, QObject *parent) :
+DataPlotter::DataPlotter(AmSpectrDialog *plotting_canvas, std::vector<float> &x, std::vector<float> &y, std::vector<float> &yHor, std::vector<float> &yVer, int framerate, QObject *parent) :
     QObject(parent),
     _x { x },
     _y { y },
+    _yHor { yHor },
+    _yVer { yVer },
     _framerate{ framerate },
     _plottingCanvas { plotting_canvas }
 {
@@ -23,6 +25,7 @@ DataPlotter::~DataPlotter()
 
 void DataPlotter::ExecutePlotting()
 {
+    // TODO: keep DRY! Refactor it later!
     while (!_stop)
     {
         std::cout<<"Executing plotting"<<std::endl;
@@ -30,16 +33,26 @@ void DataPlotter::ExecutePlotting()
         // Transform std::vector to QVector
         QVector<double> x(qAsConst(_x).size());
         std::copy(_x.begin(), _x.end(), x.begin());
+
+        // Common magnitudes
         QVector<double> y(qAsConst(_y).size());
         std::copy(_y.begin(), _y.end(), y.begin());
         _plottingCanvas->ui->plot->graph()->setData(x, y);
         _plottingCanvas->ui->plot->replot();
 
-<<<<<<< HEAD
-        int delay = (8*1000/_framerate);
-=======
+        // Horizontal magnitudes
+        QVector<double> yHor(qAsConst(_yHor).size());
+        std::copy(_yHor.begin(), _yHor.end(), yHor.begin());
+        _plottingCanvas->ui->plotHor->graph()->setData(x, yHor);
+        _plottingCanvas->ui->plotHor->replot();
+
+        // Vertical magnitudes
+        QVector<double> yVer(qAsConst(_yVer).size());
+        std::copy(_yVer.begin(), _yVer.end(), yVer.begin());
+        _plottingCanvas->ui->plotVer->graph()->setData(x, yVer);
+        _plottingCanvas->ui->plotVer->replot();
+
         int delay = (LIVE_CALC_REFRESH_RATIO*1000/_framerate);
->>>>>>> 6ac566c9c513dd817577d6da59e77fbde85ebfea
         this->msleep(delay);
     }
     std::cout<<"Stopped plotting"<<std::endl;

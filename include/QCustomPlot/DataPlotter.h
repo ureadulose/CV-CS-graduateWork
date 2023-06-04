@@ -14,7 +14,7 @@ class DataPlotter : public QObject
     Q_OBJECT
 
 public:
-    explicit DataPlotter(AmSpectrDialog *plotting_canvas, std::vector<float> &x, std::vector<float> &y, int framerate, QObject *parent = nullptr);
+    explicit DataPlotter(AmSpectrDialog *plotting_canvas, std::vector<float> &x, std::vector<float> &y, std::vector<float> &yHor, std::vector<float> &yVer, int framerate, QObject *parent = nullptr);
     ~DataPlotter();
 
     void StopPlotting();
@@ -30,6 +30,8 @@ private:
 
     std::vector<float> &_x;
     std::vector<float> &_y;
+    std::vector<float> &_yHor;
+    std::vector<float> &_yVer;
     int _framerate;
 
     AmSpectrDialog *_plottingCanvas;

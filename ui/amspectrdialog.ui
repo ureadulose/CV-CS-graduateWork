@@ -7,14 +7,20 @@
     <x>0</x>
     <y>0</y>
     <width>648</width>
-    <height>253</height>
+    <height>554</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
+   <item row="1" column="0">
+    <widget class="QCustomPlot" name="plotHor" native="true"/>
+   </item>
+   <item row="2" column="0">
+    <widget class="QCustomPlot" name="plotVer" native="true"/>
+   </item>
+   <item row="3" column="0">
     <widget class="QCustomPlot" name="plot" native="true"/>
    </item>
   </layout>

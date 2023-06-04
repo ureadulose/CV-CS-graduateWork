@@ -26,7 +26,7 @@ bool DataPoint::ShowSpectrum()
     if (_amSpectrDialog != nullptr)
         return false;
 
-    _amSpectrDialog = new AmSpectrDialog(_freqs, _magnitudes, _sampleRate, _maxMagnitude);
+    _amSpectrDialog = new AmSpectrDialog(_freqs, _magnitudes, _magnitudesHor, _magnitudesVer, _sampleRate, _maxMagnitude);
     _amSpectrDialog->setAttribute(Qt::WA_DeleteOnClose);
     QObject::connect(_amSpectrDialog, SIGNAL(finished()), this, SLOT(HideSpectrum()));
     _amSpectrDialog->SetupThread();
@@ -118,16 +118,23 @@ void DataPoint::CalculateDFT()
         freqs.push_back(tmp);
     }
 
+    // TODO: implement in just one vector of cv::Point2f instead of 3 separate vectors
     // computing magnitude
     std::vector<float> magnitudes;
+    std::vector<float> magnitudesHor;
+    std::vector<float> magnitudesVer;
     for (size_t i = 0; i < samplesAmount; i++)
     {
         float currentMagnitude = sqrt(p1[i].x * p1[i].x + p1[i].y * p1[i].y);
         magnitudes.push_back(currentMagnitude);
+        magnitudesHor.push_back(p1[i].x);
+        magnitudesVer.push_back(p1[i].y);
     }
 
     _freqs = freqs;
     _magnitudes = magnitudes;
+    _magnitudesHor = magnitudesHor;
+    _magnitudesVer = magnitudesVer;
 
     // finding max value in magnitudes vector
     auto itt_max = std::max_element(magnitudes.begin(), magnitudes.end());
