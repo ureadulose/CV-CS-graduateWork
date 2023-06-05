@@ -66,9 +66,7 @@ private:
     float _maxMagnitude;
 
     // probably temporary
-    std::vector<float> _magnitudes;
-    std::vector<float> _magnitudesHor;
-    std::vector<float> _magnitudesVer;
+    std::vector<QPointF> _magnitudes;
     std::vector<float> _freqs;
 };
 

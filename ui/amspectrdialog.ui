@@ -13,23 +13,23 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
-   <item row="1" column="0">
-    <widget class="QCustomPlot" name="plotHor" native="true"/>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QwtPlot" name="plotAm" native="true"/>
    </item>
-   <item row="2" column="0">
-    <widget class="QCustomPlot" name="plotVer" native="true"/>
+   <item>
+    <widget class="QwtPlot" name="plotHor" native="true"/>
    </item>
-   <item row="3" column="0">
-    <widget class="QCustomPlot" name="plot" native="true"/>
+   <item>
+    <widget class="QwtPlot" name="plotVer" native="true"/>
    </item>
   </layout>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>QCustomPlot</class>
+   <class>QwtPlot</class>
    <extends>QWidget</extends>
-   <header>QCustomPlot/qcustomplot.h</header>
+   <header>qwt_plot.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

@@ -10,7 +10,6 @@ SOURCES +=  \
     src/PointsHandling/PointTracker.cpp \
     src/PointsHandling/PointsManager.cpp \
     src/QCustomPlot/DataPlotter.cpp \
-    src/QCustomPlot/qcustomplot.cpp \
     src/VideoHandling/CvFrameBufferHandler.cpp \
     src/VideoHandling/VideoFrame.cpp \
     src/VideoHandling/VideoTrackerPlayer.cpp \
@@ -30,7 +29,6 @@ HEADERS += \
     include/PointsHandling/PointTracker.h \
     include/PointsHandling/PointsManager.h \
     include/QCustomPlot/DataPlotter.h \
-    include/QCustomPlot/qcustomplot.h \
     include/VideoHandling/CvFrameBufferHandler.h \
     include/VideoHandling/VideoFrame.h \
     include/VideoHandling/VideoTrackerPlayer.h \
@@ -73,6 +71,16 @@ PRE_TARGETDEPS += $$PWD/../../ThirdParty/opencv/opencv470_g/x64/mingw/lib/libope
 PRE_TARGETDEPS += $$PWD/../../ThirdParty/opencv/opencv470_g/x64/mingw/lib/libopencv_video470.dll.a
 PRE_TARGETDEPS += $$PWD/../../ThirdParty/opencv/opencv470_g/x64/mingw/lib/libopencv_videoio470.dll.a
 PRE_TARGETDEPS += $$PWD/../../ThirdParty/opencv/opencv470_g/x64/mingw/lib/libopencv_tracking470.dll.a
+
+# Qwt
+win32: LIBS += -L$$PWD/../../ThirdParty/qwt-6.2.0/lib/ -llibqwt
+
+INCLUDEPATH += $$PWD/../../ThirdParty/qwt-6.2.0/include
+DEPENDPATH += $$PWD/../../ThirdParty/qwt-6.2.0/include
+
+
+PRE_TARGETDEPS += $$PWD/../../ThirdParty/qwt-6.2.0/lib/libqwt.a
+
 
 # Default rules for deployment.
 #qnx: target.path = /tmp/$${TARGET}/bin

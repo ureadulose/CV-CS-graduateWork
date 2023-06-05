@@ -12,7 +12,7 @@ DataPoint::DataPoint(cv::Point2f& point, float& sample_rate, QObject *parent) :
 {
     UpdateROI();
 
-    _magnitudes = std::vector<float>();
+    _magnitudes = std::vector<QPointF>();
     _freqs = std::vector<float>();
 }
 
@@ -26,7 +26,7 @@ bool DataPoint::ShowSpectrum()
     if (_amSpectrDialog != nullptr)
         return false;
 
-    _amSpectrDialog = new AmSpectrDialog(_freqs, _magnitudes, _magnitudesHor, _magnitudesVer, _sampleRate, _maxMagnitude);
+    _amSpectrDialog = new AmSpectrDialog(_freqs, _magnitudes, _sampleRate, _maxMagnitude);
     _amSpectrDialog->setAttribute(Qt::WA_DeleteOnClose);
     QObject::connect(_amSpectrDialog, SIGNAL(finished()), this, SLOT(HideSpectrum()));
     _amSpectrDialog->SetupThread();
@@ -103,44 +103,33 @@ void DataPoint::CalculateDFT()
     }
 
     // computing single-sided spectrum p1 based on p2 and even-valued signal length
+    std::vector<QPointF> magnitudes;
+    std::vector<float> freqs;
     for (size_t i = 0; i < samplesAmount; i++)
     {
         size_t idx = 0;
         idx = (size_t)(((double)(i)) / 2.0 + 1.0);
         p1.push_back(p2[idx]);
+
+        // adding new magnitude
+        magnitudes.push_back(QPointF(p2[idx].x, p2[idx].y));
     }
 
-    // possible frequencies
-    std::vector<float> freqs;
+    // possible frequencies and magnitudes
     for(size_t i = 0; i < samplesAmount; i++)
     {
         float tmp = _sampleRate * ((float)(i) / 2.f) / (float)(samplesAmount);
         freqs.push_back(tmp);
     }
 
-    // TODO: implement in just one vector of cv::Point2f instead of 3 separate vectors
-    // computing magnitude
-    std::vector<float> magnitudes;
-    std::vector<float> magnitudesHor;
-    std::vector<float> magnitudesVer;
-    for (size_t i = 0; i < samplesAmount; i++)
-    {
-        float currentMagnitude = sqrt(p1[i].x * p1[i].x + p1[i].y * p1[i].y);
-        magnitudes.push_back(currentMagnitude);
-        magnitudesHor.push_back(p1[i].x);
-        magnitudesVer.push_back(p1[i].y);
-    }
-
-    _freqs = freqs;
-    _magnitudes = magnitudes;
-    _magnitudesHor = magnitudesHor;
-    _magnitudesVer = magnitudesVer;
+    _freqs = std::move(freqs);
+    _magnitudes = std::move(magnitudes);
 
     // finding max value in magnitudes vector
-    auto itt_max = std::max_element(magnitudes.begin(), magnitudes.end());
-    int maxIdx = std::distance(magnitudes.begin(), itt_max);
+//    auto itt_max = std::max_element(magnitudes.begin(), magnitudes.end());
+//    int maxIdx = std::distance(magnitudes.begin(), itt_max);
 
-    _maxMagnitude = magnitudes[maxIdx];
+//    _maxMagnitude = magnitudes[maxIdx];
 }
 
 bool DataPoint::HitTest(cv::Point2f &point)

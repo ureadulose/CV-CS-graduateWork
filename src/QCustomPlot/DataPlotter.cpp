@@ -1,26 +1,42 @@
 #include "QCustomPlot/DataPlotter.h"
+
 #include "ui/AmSpectrDialog.h"
 #include "ui_amspectrdialog.h"
 
 // for debug purposes
 #include <iostream>
 
-DataPlotter::DataPlotter(AmSpectrDialog *plotting_canvas, std::vector<float> &x, std::vector<float> &y, std::vector<float> &yHor, std::vector<float> &yVer, int framerate, QObject *parent) :
+
+// TODO: Make dynamical amount of plots in AmSpectrDialog!
+
+DataPlotter::DataPlotter(AmSpectrDialog *plottingCanvas, std::vector<float> &x, std::vector<QPointF> &y, int framerate, QObject *parent) :
     QObject(parent),
     _x { x },
     _y { y },
-    _yHor { yHor },
-    _yVer { yVer },
     _framerate{ framerate },
-    _plottingCanvas { plotting_canvas }
+    _plottingCanvas { plottingCanvas }
 {
     _stop = false;
+    for (int i = 0; i < CURVES_AMOUNT; i++)
+    {
+        _curves[i] = new QwtPlotCurve();
+    }
+
+    QLayout* layout =_plottingCanvas->layout();
+
+    for (int i = 0; i < layout->count(); i++)
+    {
+        _plots[i] = qobject_cast<QwtPlot*>(layout->itemAt(i)->widget());
+    }
 }
 
 DataPlotter::~DataPlotter()
 {
+    for (int i = 0; i < CURVES_AMOUNT; i++)
+    {
+        delete _curves[i];
+    }
     std::cout<<"DP DESTRUCT!"<<std::endl;
-
 }
 
 void DataPlotter::ExecutePlotting()
@@ -29,34 +45,43 @@ void DataPlotter::ExecutePlotting()
     while (!_stop)
     {
         std::cout<<"Executing plotting"<<std::endl;
-        // TODO: make it more efficient (right now there are a lot of copying and etc.)
-        // Transform std::vector to QVector
-        QVector<double> x(qAsConst(_x).size());
-        std::copy(_x.begin(), _x.end(), x.begin());
 
-        // Common magnitudes
-        QVector<double> y(qAsConst(_y).size());
-        std::copy(_y.begin(), _y.end(), y.begin());
-        _plottingCanvas->ui->plot->graph()->setData(x, y);
-        _plottingCanvas->ui->plot->replot();
+        QVector<float> x;
+        QVector<float> y;
+        QVector<float> yHor;
+        QVector<float> yVer;
 
-        // Horizontal magnitudes
-        QVector<double> yHor(qAsConst(_yHor).size());
-        std::copy(_yHor.begin(), _yHor.end(), yHor.begin());
-        _plottingCanvas->ui->plotHor->graph()->setData(x, yHor);
-        _plottingCanvas->ui->plotHor->replot();
+        QVector<float>* Ys[3];
+        Ys[0] = &y;
+        Ys[1] = &yHor;
+        Ys[2] = &yVer;
 
-        // Vertical magnitudes
-        QVector<double> yVer(qAsConst(_yVer).size());
-        std::copy(_yVer.begin(), _yVer.end(), yVer.begin());
-        _plottingCanvas->ui->plotVer->graph()->setData(x, yVer);
-        _plottingCanvas->ui->plotVer->replot();
+        for (size_t i = 0; i < _x.size(); i++)
+        {
+            x.push_back(_x[i]);
+            y.push_back(_y[i].x() * _y[i].x() + _y[i].y() * _y[i].y());
+            yHor.push_back(_y[i].x());
+            yVer.push_back(_y[i].y());
+        }
+
+        for (int i = 0; i < CURVES_AMOUNT; i++)
+        {
+            PlotData(_curves[i], _plots[i], x, *Ys[i]);
+        }
+
 
         int delay = (LIVE_CALC_REFRESH_RATIO*1000/_framerate);
 
         this->msleep(delay);
     }
     std::cout<<"Stopped plotting"<<std::endl;
+}
+
+void DataPlotter::PlotData(QwtPlotCurve *curve, QwtPlot *plot, const QVector<float> &x, const QVector<float> &y)
+{
+    curve->setSamples(x.data(), y.data(), x.size());
+    curve->attach(plot);
+    plot->replot();
 }
 
 void DataPlotter::StopPlotting()
